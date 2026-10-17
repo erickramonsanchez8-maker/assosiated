@@ -335,6 +335,15 @@ button:active,.btn:active{transform:scale(.985)}
  .onboarding-actions .btn{width:100%}
 }
 
+
+/* Composite the real photo plus brand treatment directly into a canvas */
+.id-object-stage,.id-object-svg,.id-photo-grade{display:none!important}
+.id-photo-composite{position:absolute;inset:0;width:100%;height:100%;display:none;z-index:2;pointer-events:none}
+.id-scene-filter{z-index:1}
+.id-scene-brand{z-index:4}
+.id-scene-photo{transition:opacity .18s}
+.onboarding-workspace .id-photo-composite{z-index:2}
+
 </style></head><body>
 <header class="hd"><div class="hb"><div class="logo">ASSOSIATED<i>163</i></div><div class="hr"><span class="who" id="who"></span><button class="lw" onclick="pal()" title="Ctrl+K">Buscar</button><button class="lw" onclick="pres()">Presentar</button><button class="btn" onclick="formC()">+ Nueva campaña</button><button class="gr" id="gear" onclick="go('s')" aria-label="Configuración" title="Configuración"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button><button class="lw" onclick="logout()">Salir</button></div></div><div class="tw"><nav class="tabs" id="nav" aria-label="Principal"></nav></div></header><main class="main" id="main"></main>
 <dialog id="dlg"></dialog><div id="toast" role="status"></div>
@@ -609,7 +618,7 @@ const IDENTITY_TEMPLATES=[
  {type:'social',name:'01 · Campaña para redes',kind:'PUBLICACIÓN SOCIAL'},
  {type:'web',name:'02 · Portada de sitio web',kind:'EXPERIENCIA DIGITAL'},
  {type:'product',name:'03 · Producto y empaque',kind:'PRESENTACIÓN DE PRODUCTO'},
- {type:'sign',name:'04 · Espacio comercial',kind:'SEÑALÉTICA Y ESPACIO'},
+ {type:'sign',name:'04 · Aplicación sobre superficie',kind:'MARCA EN CONTEXTO'},
  {type:'stationery',name:'05 · Papelería corporativa',kind:'IDENTIDAD EDITORIAL'},
  {type:'campaign',name:'06 · Anuncio de campaña',kind:'CAMPAÑA VISUAL'}
 ];
@@ -823,7 +832,7 @@ function identityView(){
  '<section class="id-summary"><div class="id-summary-head"><div><span class="id-kicker">03 / Síntesis de marca</span><h2 id="idSummaryTitle">'+v('name')+'</h2></div><span class="demo">HIPÓTESIS · VALIDAR</span></div>'+
  '<p id="idSummaryStatement">Una marca para '+E(d.audience||'un público por definir')+', enfocada en '+E(d.offer||'una propuesta por definir')+'.</p>'+
  '<div class="id-summary-grid"><div class="id-summary-item"><small>Giro</small><b id="idSummarySector">'+E((IDENTITY_SECTORS[d.sector]||IDENTITY_SECTORS.creative).label)+'</b></div><div class="id-summary-item"><small>Personalidad</small><b id="idSummaryPersonality">'+E(d.personality)+'</b></div><div class="id-summary-item"><small>Diferenciador a validar</small><b id="idSummaryDifference">'+E(d.difference||'Por definir')+'</b></div></div>'+
- '<div class="id-license-note">La paleta modifica en vivo el tratamiento cromático de la fotografía y los materiales de cada mockup. El logo y el nombre se colocan sobre la superficie del objeto (empaque, vaso, libreta, dispositivo o señalética), con luz, sombras y perspectiva simuladas. Son composiciones de referencia, no una sustitución pixel a pixel del objeto original de la foto.</div></section></section></section>';
+ '<div class="id-license-note">El estudio recompone las fotografías reales en un canvas: ajusta el color de la imagen y aplica la paleta, el logo y el nombre sobre una zona definida de la pantalla, caja, botella, libreta o tarjeta. Cada objeto usa una máscara aproximada propia; revisa su alineación antes de aprobar el arte final.</div></section></section></section>';
  return head('Identidad de marca','Define los fundamentos visuales y mira cómo podrían vivir en contextos de tu industria.', '<span class="demo">BRAND STUDIO</span>')+src;
 }
 function identityUpdate(repaint){
@@ -849,8 +858,6 @@ function identityUpdate(repaint){
  setText('#idSummaryPersonality',identityPersonalityLabel(d.personality));
  setText('#idSummaryDifference',d.difference||'Por definir');
  document.querySelectorAll('#main .id-scene').forEach(function(el){el.style.setProperty('--id-primary',d.primary);el.style.setProperty('--id-secondary',d.secondary);el.style.setProperty('--id-accent',d.accent);el.style.setProperty('--id-paper',d.paper);el.style.setProperty('--id-ink',identityInk(d.primary));el.style.setProperty('--id-accent-ink',identityInk(d.accent))});
- document.querySelectorAll('#main .id-surface-logo-img').forEach(function(img){img.setAttribute('href',d.logo||'');img.style.display=d.logo?'':'none'});
- document.querySelectorAll('#main .id-surface-logo-text').forEach(function(el){el.textContent=identityInitials(d.name);el.style.display=d.logo?'none':''});
  document.querySelectorAll('#main .id-logo-slot').forEach(function(slot){
   if(d.logo){
    let img=slot.querySelector('img');
@@ -858,7 +865,8 @@ function identityUpdate(repaint){
   }else{if(slot.querySelector('img')||slot.textContent!==identityInitials(d.name)){slot.textContent=identityInitials(d.name)}}
  });
  document.querySelectorAll('#main .id-scene-heading').forEach(function(el){el.style.fontFamily=root?getComputedStyle(root).getPropertyValue('--id-font'): '"Cormorant Garamond",Georgia,serif'});
- if(repaint){const grid=$('#idMockGrid');if(grid){const os=IDENTITY_SECTORS[d.sector]||IDENTITY_SECTORS.creative;grid.innerHTML=R.v==='w'?identityPhotoMarkup(d,IDENTITY_PHOTOS[os.pool[0]],{type:'product',name:'Tu primera aplicación',kind:'IDENTIDAD SOBRE OBJETO'},0):identityGallery(d);identityUpdate(false)}}
+ if(repaint){const grid=$('#idMockGrid');if(grid){grid.innerHTML=R.v==='w'?identityPhotoMarkup(d,identityPhotoForTemplate(d,{type:'product'},0),{type:'product',name:'Tu primera aplicación',kind:'IDENTIDAD SOBRE OBJETO'},0):identityGallery(d);identityUpdate(false)}}
+ identitySchedulePaint();
  return d;
 }
 function identitySetPalette(key){
@@ -880,7 +888,7 @@ function identityLogoPick(input){
 function identityClearLogo(){const old=S.identityStudio||IDENTITY_DEFAULTS;const d=identityDataFromForm();d.logo='';d.logoFile='';S.identityStudio=d;const f=$('#idBrandLogo');if(f)f.value='';const n=$('#idLogoName');if(n)n.textContent='Sin archivo · se muestran las iniciales';identityUpdate(false);identityMessage('Se aplicará un monograma con las iniciales de la marca.',false)}
 function identityDownload(name,body,mime){const blob=new Blob([body],{type:mime});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(url)},1200)}
 function identityExport(){
- const d=identityUpdate(false),photos=Object.keys(IDENTITY_PHOTOS).map(function(k){return{title:IDENTITY_PHOTOS[k].title,source:IDENTITY_PHOTOS[k].source,credit:IDENTITY_PHOTOS[k].credit}});
+ const d=identityUpdate(false),photos=Object.keys(IDENTITY_PHOTOS).map(function(k){return{title:IDENTITY_PHOTOS[k].title,source:IDENTITY_PHOTOS[k].source,credit:IDENTITY_PHOTOS[k].credit,license:'Unsplash License',surface:IDENTITY_PHOTOS[k].surface||'color treatment only'}});
  const payload={product:'ASSOSIATED 163 · Brand Studio',version:'1.0',exportedAt:new Date().toISOString(),brand:d,photoCredits:photos,license:'Fotografías de Unsplash bajo la licencia Unsplash. Consultar términos y verificar permisos de marcas, obras y personas reconocibles antes de usar en materiales comerciales.'};
  identityDownload('assosiated-identidad-'+((d.name||'marca').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'')||'marca')+'.json',JSON.stringify(payload,null,2),'application/json;charset=utf-8');
  identityMessage('Proyecto JSON exportado con datos de marca y fuentes fotográficas.',false);
@@ -901,7 +909,7 @@ function onboardingView(){
   return '<button class="id-palette" type="button" onclick="identitySetPalette(\''+key+'\')"><span class="id-palette-dots"><i style="background:'+p.primary+'"></i><i style="background:'+p.secondary+'"></i><i style="background:'+p.accent+'"></i></span>'+E(p.label)+'</button>';
  }).join('');
  const sec=IDENTITY_SECTORS[d.sector]||IDENTITY_SECTORS.creative;
- const mock=identityPhotoMarkup(d,IDENTITY_PHOTOS[sec.pool[0]],{type:'product',name:'Tu primera aplicación',kind:'IDENTIDAD SOBRE OBJETO'},0);
+ const mock=identityPhotoMarkup(d,identityPhotoForTemplate(d,{type:'product'},0),{type:'product',name:'Tu primera aplicación',kind:'IDENTIDAD SOBRE OBJETO'},0);
  return '<section class="onboarding-shell"><div class="onboarding-intro"><span class="id-kicker">CONFIGURACIÓN INICIAL · PASO 1 DE 1</span><h1>Antes de empezar, define tu marca.</h1><p>Elige una primera dirección visual. Los colores y el logo se aplican en vivo al objeto de muestra; podrás ajustar todo después desde Configuración.</p></div>'+
  '<div class="id-workspace onboarding-workspace" style="--id-primary:'+E(d.primary)+';--id-secondary:'+E(d.secondary)+';--id-accent:'+E(d.accent)+';--id-paper:'+E(d.paper)+';--id-ink:'+identityInk(d.primary)+';--id-accent-ink:'+identityInk(d.accent)+'">'+
  '<section class="id-panel id-controls"><div class="id-panel-head"><div><span class="id-kicker">01 / Fundamentos</span><h2>La primera versión de tu identidad</h2><p>No necesitas tener todo decidido ahora.</p></div></div>'+
