@@ -17,6 +17,15 @@ El panel administrativo interno sigue siendo `ASSOSIATED_163.html`; no es la pá
 4. Selecciona la rama **main** y la carpeta **/docs**. Guarda los cambios.
 5. Espera a que GitHub marque la publicación como exitosa en esa misma pantalla.
 
+## URLs esperadas después de activar Pages
+
+- ASSOSIATED: `https://erickramonsanchez8-maker.github.io/assosiated/`
+- Definición de identidad ASSOSIATED: `https://erickramonsanchez8-maker.github.io/assosiated/identidad.html`
+- Sitio de Shalom: `https://erickramonsanchez8-maker.github.io/assosiated/shalom.html`
+- Tienda de Shalom: `https://erickramonsanchez8-maker.github.io/assosiated/shalom-tienda.html`
+
+Estas direcciones son las esperadas una vez habilitada la publicación; la existencia de los archivos no confirma por sí sola que el sitio ya esté desplegado.
+
 Si la fuente de publicación ya está configurada, los cambios en la rama `main` se publicarán automáticamente. El archivo `docs/.nojekyll` indica que el sitio contiene páginas estáticas y no necesita que Jekyll procese el sitio. Solo se publican los cuatro archivos de `docs`; el panel interno que está en la raíz queda fuera de esa publicación.
 
 ## Antes de anunciar las páginas al público
