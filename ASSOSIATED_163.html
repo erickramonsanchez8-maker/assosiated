@@ -223,41 +223,41 @@ button:active,.btn:active{transform:scale(.985)}
 .id-scene{--id-primary:#031221;--id-secondary:#f3f5f9;--id-accent:#0e8f9a;--id-paper:#fff;position:relative;isolation:isolate;overflow:hidden;aspect-ratio:1.12/1;min-height:210px;background:var(--id-secondary);color:#fff}
 .id-scene-photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;z-index:-2;transition:transform .7s cubic-bezier(.2,.7,.2,1);background:var(--id-secondary)}
 .id-mock-card:hover .id-scene-photo{transform:scale(1.035)}
-.id-scene-filter{position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,rgba(3,18,33,.12) 0%,var(--id-primary)E8 100%);pointer-events:none}
-.id-scene-brand{position:absolute;inset:15px;display:flex;flex-direction:column;justify-content:space-between;gap:12px;min-width:0}
+.id-scene-filter{position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,rgba(3,18,33,.12) 0%,color-mix(in srgb,var(--id-primary) 91%,transparent) 100%);pointer-events:none}
+.id-scene-brand{position:absolute;inset:15px;display:flex;flex-direction:column;justify-content:space-between;gap:12px;min-width:0;color:var(--id-ink,#fff)}
 .id-brand-lockup{display:flex;align-items:center;gap:8px;min-width:0;max-width:100%}
-.id-logo-slot{flex:0 0 auto;width:34px;height:34px;display:grid;place-items:center;overflow:hidden;border-radius:8px;background:var(--id-accent);color:#fff;border:1px solid #ffffff45;font:800 11px Manrope,sans-serif;box-shadow:0 3px 10px #0002}
+.id-logo-slot{flex:0 0 auto;width:34px;height:34px;display:grid;place-items:center;overflow:hidden;border-radius:8px;background:var(--id-accent);color:var(--id-accent-ink,#fff);border:1px solid #ffffff45;font:800 11px Manrope,sans-serif;box-shadow:0 3px 10px #0002}
 .id-logo-slot img{display:block;width:100%;height:100%;object-fit:contain;padding:2px}
 .id-logo-slot.round{border-radius:50%}
 .id-brand-text{display:grid;gap:2px;min-width:0}
-.id-brand-name{font:800 12px Manrope,sans-serif;line-height:1.1;overflow-wrap:anywhere;text-shadow:0 1px 10px #0002}
+.id-brand-name{font:800 12px var(--id-font,Manrope,sans-serif);line-height:1.1;overflow-wrap:anywhere;text-shadow:0 1px 10px #0002}
 .id-brand-tagline{font-size:9px;line-height:1.25;opacity:.86;overflow-wrap:anywhere}
 .id-scene-copy{max-width:100%;min-width:0}
 .id-scene-overline{display:inline-block;color:var(--id-accent);font:800 9px Manrope,sans-serif;letter-spacing:.13em;text-transform:uppercase;margin-bottom:7px;text-shadow:0 1px 7px #0005}
-.id-scene-heading{font:500 clamp(19px,2.2vw,27px)/1.02 "Cormorant Garamond",Georgia,serif;margin:0 0 7px;max-width:100%;overflow-wrap:anywhere;text-shadow:0 1px 12px #0004}
+.id-scene-heading{font:500 clamp(19px,2.2vw,27px)/1.02 var(--id-font,"Cormorant Garamond",Georgia,serif);margin:0 0 7px;max-width:100%;overflow-wrap:anywhere;text-shadow:0 1px 12px #0004}
 .id-scene-description{font-size:10px;line-height:1.45;max-width:95%;margin:0 0 10px;opacity:.92;overflow-wrap:anywhere;text-shadow:0 1px 8px #0005}
 .id-scene-cta{display:inline-flex;align-items:center;max-width:100%;background:var(--id-accent);color:#fff;padding:7px 10px;border-radius:5px;font:800 8px Manrope,sans-serif;letter-spacing:.05em;overflow-wrap:anywhere}
 .id-scene-index{position:absolute;right:12px;top:12px;border-radius:4px;background:#0312219c;color:#fff;padding:5px 7px;font:800 8px Manrope,sans-serif;letter-spacing:.1em;text-transform:uppercase}
-.id-scene--web .id-scene-filter{background:linear-gradient(90deg,var(--id-primary)F5 0%,var(--id-primary)C8 52%,transparent 100%)}
+.id-scene--web .id-scene-filter{background:linear-gradient(90deg,color-mix(in srgb,var(--id-primary) 96%,transparent) 0%,color-mix(in srgb,var(--id-primary) 78%,transparent) 52%,transparent 100%)}
 .id-scene--web .id-scene-brand{right:28%;justify-content:center}
 .id-scene--web .id-scene-heading{font-size:clamp(23px,2.7vw,34px)}
 .id-scene--web .id-brand-lockup{margin-bottom:12px}
-.id-scene--product .id-scene-filter{background:linear-gradient(0deg,var(--id-primary)EE 0%,transparent 75%)}
+.id-scene--product .id-scene-filter{background:linear-gradient(0deg,color-mix(in srgb,var(--id-primary) 93%,transparent) 0%,transparent 75%)}
 .id-scene--product .id-scene-brand{align-items:flex-start;justify-content:flex-end}
 .id-scene--product .id-scene-copy{padding:10px 12px;background:var(--id-paper);color:var(--id-primary);border-left:4px solid var(--id-accent);width:min(92%,275px);box-shadow:0 5px 18px #0312212b}
 .id-scene--product .id-scene-overline,.id-scene--product .id-scene-heading,.id-scene--product .id-scene-description{text-shadow:none}
 .id-scene--product .id-scene-heading{color:var(--id-primary);font-size:22px}
 .id-scene--product .id-scene-description{color:var(--id-primary);opacity:.8}
 .id-scene--product .id-brand-lockup{align-self:flex-start;padding:7px 9px;background:var(--id-primary);border-radius:6px}
-.id-scene--sign .id-scene-filter{background:linear-gradient(0deg,var(--id-primary)F2 0%,transparent 70%)}
+.id-scene--sign .id-scene-filter{background:linear-gradient(0deg,color-mix(in srgb,var(--id-primary) 95%,transparent) 0%,transparent 70%)}
 .id-scene--sign .id-scene-brand{justify-content:flex-end}
 .id-scene--sign .id-brand-lockup{padding:10px 12px;background:var(--id-paper);color:var(--id-primary);border-left:5px solid var(--id-accent);align-self:flex-start;box-shadow:0 5px 18px #0002}
 .id-scene--sign .id-brand-name{color:var(--id-primary);text-shadow:none}
 .id-scene--sign .id-brand-tagline{color:var(--id-primary);opacity:.75}
-.id-scene--stationery .id-scene-filter{background:linear-gradient(180deg,transparent 20%,var(--id-primary)C8 100%)}
+.id-scene--stationery .id-scene-filter{background:linear-gradient(180deg,transparent 20%,color-mix(in srgb,var(--id-primary) 78%,transparent) 100%)}
 .id-scene--stationery .id-scene-brand{inset:auto 10px 10px 10px;padding:12px;background:var(--id-paper);color:var(--id-primary);border-top:4px solid var(--id-accent);box-shadow:0 6px 20px #0003}
 .id-scene--stationery .id-brand-name{color:var(--id-primary);text-shadow:none}.id-scene--stationery .id-brand-tagline{color:var(--id-primary);opacity:.76}
-.id-scene--campaign .id-scene-filter{background:linear-gradient(0deg,var(--id-primary)F5 0%,var(--id-primary)30 45%,transparent 100%)}
+.id-scene--campaign .id-scene-filter{background:linear-gradient(0deg,color-mix(in srgb,var(--id-primary) 96%,transparent) 0%,color-mix(in srgb,var(--id-primary) 18%,transparent) 45%,transparent 100%)}
 .id-scene--campaign .id-scene-brand{align-items:center;text-align:center;justify-content:center}
 .id-scene--campaign .id-brand-lockup{justify-content:center;margin-bottom:5px}
 .id-scene--campaign .id-scene-copy{max-width:92%}.id-scene--campaign .id-scene-heading{font-size:clamp(24px,3vw,36px)}
@@ -573,6 +573,8 @@ function identityDataFromForm(){
   logoFile:typeof old.logoFile==='string'?old.logoFile:''
  };
 }
+function identityInk(hex){const h=String(hex||'#031221').replace('#','');const a=[parseInt(h.slice(0,2),16),parseInt(h.slice(2,4),16),parseInt(h.slice(4,6),16)].map(function(v){v/=255;return v<=.04045?v/12.92:Math.pow((v+.055)/1.055,2.4)});const lum=.2126*a[0]+.7152*a[1]+.0722*a[2];return (1.05/(lum+.05))>=((lum+.05)/.05)?'#FFFFFF':'#111820'}
+function identityPersonalityLabel(v){return ({premium:'Sofisticada',warm:'Cercana',bold:'Audaz',expert:'Experta',natural:'Natural',innovative:'Innovadora'})[v]||v||'Por definir'}
 function identityInitials(name){
  const a=String(name||'').trim().split(/\s+/).filter(Boolean);
  return (!a.length?'MB':a.length===1?a[0].slice(0,2):a[0].charAt(0)+a[a.length-1].charAt(0)).toLocaleUpperCase('es-MX').slice(0,2);
@@ -582,8 +584,8 @@ function identityPhotoMarkup(d,p,t,i){
  const offer=d.offer||'Tu propuesta, expresada con coherencia.';
  const tag=d.tagline||'Ideas que dejan huella';
  const logo=identityInitials(d.name);
- const primary=E(d.primary),accent=E(d.accent),paper=E(d.paper),secondary=E(d.secondary);
- let html='<article class="id-mock-card"><figure class="id-scene id-scene--'+E(t.type)+'" style="--id-primary:'+primary+';--id-secondary:'+secondary+';--id-accent:'+accent+';--id-paper:'+paper+'">';
+ const primary=E(d.primary),accent=E(d.accent),paper=E(d.paper),secondary=E(d.secondary),ink=E(identityInk(d.primary)),accentInk=E(identityInk(d.accent));
+ let html='<article class="id-mock-card"><figure class="id-scene id-scene--'+E(t.type)+'" style="--id-primary:'+primary+';--id-secondary:'+secondary+';--id-accent:'+accent+';--id-paper:'+paper+';--id-ink:'+ink+';--id-accent-ink:'+accentInk+'">';
  html+='<img class="id-scene-photo" src="'+E(p.url)+'" alt="'+E(p.title)+'" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="this.hidden=true">';
  html+='<div class="id-scene-filter"></div><div class="id-scene-brand">';
  html+='<div class="id-brand-lockup"><span class="id-logo-slot" data-id-logo><span>'+E(logo)+'</span></span><span class="id-brand-text"><b class="id-brand-name">'+E(d.name)+'</b><small class="id-brand-tagline">'+E(tag)+'</small></span></div>';
@@ -606,7 +608,7 @@ function identityView(){
   const p=IDENTITY_PALETTES[key];
   return '<button class="id-palette" type="button" onclick="identitySetPalette(\''+key+'\')"><span class="id-palette-dots"><i style="background:'+p.primary+'"></i><i style="background:'+p.secondary+'"></i><i style="background:'+p.accent+'"></i></span>'+E(p.label)+'</button>';
  }).join('');
- const src= '<section class="id-workspace"><section class="id-panel id-controls"><div class="id-panel-head"><div><span class="id-kicker">01 / Brief de marca</span><h2>Define el punto de partida</h2><p>Lo que escribas se refleja en las aplicaciones.</p></div><span class="demo">BORRADOR</span></div>'+
+ const src= '<section class="id-workspace" style="--id-primary:'+E(d.primary)+';--id-secondary:'+E(d.secondary)+';--id-accent:'+E(d.accent)+';--id-paper:'+E(d.paper)+';--id-ink:'+identityInk(d.primary)+';--id-accent-ink:'+identityInk(d.accent)+'"><section class="id-panel id-controls"><div class="id-panel-head"><div><span class="id-kicker">01 / Brief de marca</span><h2>Define el punto de partida</h2><p>Lo que escribas se refleja en las aplicaciones.</p></div><span class="demo">BORRADOR</span></div>'+
  '<div class="id-fields"><div class="id-field"><label for="idBrandName">Nombre de marca</label><input id="idBrandName" maxlength="90" autocomplete="organization" value="'+v('name')+'" placeholder="Ej. Aurora Estudio" oninput="identityUpdate(false)"></div>'+
  '<div class="id-field"><label for="idBrandTagline">Frase o tagline</label><input id="idBrandTagline" maxlength="120" value="'+v('tagline')+'" placeholder="Ej. Ideas que dejan huella" oninput="identityUpdate(false)"></div>'+
  '<div class="row"><div class="id-field"><label for="idBrandSector">Giro del negocio</label><select id="idBrandSector" onchange="identityUpdate(true)">'+option('sector','restaurant','Restaurante / café')+option('sector','retail','Comercio / productos')+option('sector','services','Servicios profesionales')+option('sector','technology','Tecnología / software')+option('sector','wellness','Bienestar / belleza')+option('sector','education','Educación / formación')+option('sector','agriculture','Agro / sustentabilidad')+option('sector','creative','Diseño / creatividad')+'</select></div>'+
@@ -638,7 +640,7 @@ function identityUpdate(repaint){
  S.identityStudio=d;
  const root=$('#main .id-workspace');
  if(root){
-  root.style.setProperty('--id-primary',d.primary);root.style.setProperty('--id-secondary',d.secondary);root.style.setProperty('--id-accent',d.accent);root.style.setProperty('--id-paper',d.paper);
+  root.style.setProperty('--id-primary',d.primary);root.style.setProperty('--id-secondary',d.secondary);root.style.setProperty('--id-accent',d.accent);root.style.setProperty('--id-paper',d.paper);root.style.setProperty('--id-ink',identityInk(d.primary));root.style.setProperty('--id-accent-ink',identityInk(d.accent));
   let font='"Cormorant Garamond",Georgia,serif';
   if(d.font==='modern')font='Manrope,sans-serif';else if(d.font==='classic')font='Georgia,"Times New Roman",serif';else if(d.font==='bold')font='800 Manrope,sans-serif';
   root.style.setProperty('--id-font',font);
@@ -652,9 +654,9 @@ function identityUpdate(repaint){
  setText('#idSummaryTitle',d.name||'Mi marca');
  setText('#idSummaryStatement','Una marca para '+(d.audience||'un público por definir')+', enfocada en '+(d.offer||'una propuesta por definir')+'.');
  setText('#idSummarySector',(IDENTITY_SECTORS[d.sector]||IDENTITY_SECTORS.creative).label);
- setText('#idSummaryPersonality',d.personality);
+ setText('#idSummaryPersonality',identityPersonalityLabel(d.personality));
  setText('#idSummaryDifference',d.difference||'Por definir');
- document.querySelectorAll('#main .id-scene').forEach(function(el){el.style.setProperty('--id-primary',d.primary);el.style.setProperty('--id-secondary',d.secondary);el.style.setProperty('--id-accent',d.accent);el.style.setProperty('--id-paper',d.paper)});
+ document.querySelectorAll('#main .id-scene').forEach(function(el){el.style.setProperty('--id-primary',d.primary);el.style.setProperty('--id-secondary',d.secondary);el.style.setProperty('--id-accent',d.accent);el.style.setProperty('--id-paper',d.paper);el.style.setProperty('--id-ink',identityInk(d.primary));el.style.setProperty('--id-accent-ink',identityInk(d.accent))});
  document.querySelectorAll('#main .id-logo-slot').forEach(function(slot){
   if(d.logo){
    let img=slot.querySelector('img');
