@@ -344,6 +344,11 @@ button:active,.btn:active{transform:scale(.985)}
 .id-scene-photo{transition:opacity .18s}
 .onboarding-workspace .id-photo-composite{z-index:2}
 
+
+.id-mock-meta{display:flex;flex-direction:column;align-items:flex-start;gap:6px;padding:10px 12px}
+.id-export-photo{appearance:none;border:1px solid var(--ln);border-radius:6px;background:var(--bg);color:var(--ink);padding:7px 10px;font:700 10px Manrope,sans-serif;cursor:pointer;transition:background .16s,border-color .16s,transform .16s}
+.id-export-photo:hover{border-color:var(--teal);background:var(--s);transform:translateY(-1px)}
+
 </style></head><body>
 <header class="hd"><div class="hb"><div class="logo">ASSOSIATED<i>163</i></div><div class="hr"><span class="who" id="who"></span><button class="lw" onclick="pal()" title="Ctrl+K">Buscar</button><button class="lw" onclick="pres()">Presentar</button><button class="btn" onclick="formC()">+ Nueva campaña</button><button class="gr" id="gear" onclick="go('s')" aria-label="Configuración" title="Configuración"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button><button class="lw" onclick="logout()">Salir</button></div></div><div class="tw"><nav class="tabs" id="nav" aria-label="Principal"></nav></div></header><main class="main" id="main"></main>
 <dialog id="dlg"></dialog><div id="toast" role="status"></div>
@@ -599,9 +604,9 @@ const IDENTITY_PHOTOS={
  education:{url:'https://images.unsplash.com/photo-1769794371055-54436b54577e?auto=format&fit=crop&w=1200&q=82',source:'https://unsplash.com/photos/desk-with-open-book-laptop-and-study-materials-HNjWq8WPyoY',credit:'Yen Vu',title:'Libros, apuntes y materiales de estudio'},
 
  laptopMockup:{url:'https://images.unsplash.com/photo-1759661142441-d77ffb3ca943?auto=format&fit=crop&w=1200&q=82',source:'https://unsplash.com/photos/open-laptop-with-blank-screen-on-a-desk-JpaUn_w5D0o',credit:'Jakub Żerdzicki',title:'Laptop real con pantalla vacía',surface:'laptop'},
- paperCard:{url:'https://images.unsplash.com/photo-1624567881801-a5a85867d990?auto=format&fit=crop&w=1200&q=82',source:'https://unsplash.com/photos/white-printer-paper-on-brown-wooden-surface-YREw6bUXAT8',credit:'grey wight',title:'Papel real para diseño corporativo',surface:'paper'},
+ paperCard:{url:'https://images.unsplash.com/photo-1623305463957-df17547327cb?auto=format&fit=crop&w=1200&q=82',source:'https://unsplash.com/photos/two-blank-business-cards-sitting-on-top-of-each-other-XdlhXRH_UJw',credit:'Mediamodifier',title:'Tarjetas de presentación en blanco',surface:'paper'},
  boxMockup:{url:'https://images.unsplash.com/photo-1577705998148-6da4f3963bc8?auto=format&fit=crop&w=1200&q=82',source:'https://unsplash.com/photos/shallow-focus-photo-of-brown-cardboard-box-8mCsyImZRGY',credit:'Brandable Box',title:'Caja de cartón real sin marca',surface:'box'},
- notebookMockup:{url:'https://images.unsplash.com/photo-1536329583941-14287ec6fc4e?auto=format&fit=crop&w=1200&q=82',source:'https://unsplash.com/photos/white-notebook-lFmuWU0tv4M',credit:'Keila Hötzel',title:'Libreta real para identidad editorial',surface:'notebook'},
+ notebookMockup:{url:'https://images.unsplash.com/photo-1761322572550-967ea8c0bfd9?auto=format&fit=crop&w=1200&q=82',source:'https://unsplash.com/photos/open-notebook-with-pen-and-pencils-on-desk-n9AaeihA9HI',credit:'Clay Banks',title:'Libreta abierta con página en blanco',surface:'notebook'},
  blankBottle:{url:'https://images.unsplash.com/photo-1763668444855-401b58dceb20?auto=format&fit=crop&w=1200&q=82',source:'https://unsplash.com/photos/clear-bottle-with-white-capsules-and-blank-label-3KsFrV7ySoQ',credit:'NutraSeller Manufacturing',title:'Botella real con etiqueta en blanco',surface:'bottle'}
 };
 const IDENTITY_SECTORS={
@@ -738,11 +743,16 @@ function identityPaintScene(scene){
  if(!img||!canvas||!img.complete||!img.naturalWidth)return;
  try{
   const rect=scene.getBoundingClientRect();
-  const w=Math.max(2,Math.round(rect.width*2)),h=Math.max(2,Math.round(rect.height*2));
+  const targetRatio=Math.max(.3,rect.width/Math.max(1,rect.height));
+  const maxOut=1600,imgRatio=img.naturalWidth/img.naturalHeight;
+  let w,h;
+  if(imgRatio>targetRatio){h=Math.min(img.naturalHeight,Math.round(maxOut/targetRatio));w=Math.round(h*targetRatio)}
+  else{w=Math.min(img.naturalWidth,maxOut);h=Math.round(w/targetRatio)}
+  w=Math.max(2,w);h=Math.max(2,h);
   canvas.width=w;canvas.height=h;canvas.style.display='block';
   const ctx=canvas.getContext('2d');
   ctx.clearRect(0,0,w,h);
-  const imgRatio=img.naturalWidth/img.naturalHeight,boxRatio=w/h;
+  const boxRatio=w/h;
   let sx=0,sy=0,sw=img.naturalWidth,sh=img.naturalHeight;
   if(imgRatio>boxRatio){sw=img.naturalHeight*boxRatio;sx=(img.naturalWidth-sw)/2}
   else{sh=img.naturalWidth/boxRatio;sy=(img.naturalHeight-sh)/2}
@@ -765,6 +775,20 @@ function dColorAlpha(hex,alpha){
  const h=String(hex||'#031221').replace('#','');
  if(!/^[0-9a-f]{6}$/i.test(h))return 'rgba(3,18,33,'+alpha+')';
  return 'rgba('+parseInt(h.slice(0,2),16)+','+parseInt(h.slice(2,4),16)+','+parseInt(h.slice(4,6),16)+','+alpha+')';
+}
+function identityDownloadPhoto(button){
+ const card=button&&button.closest?button.closest('.id-mock-card'):null;
+ const canvas=card&&card.querySelector('.id-photo-composite');
+ if(!canvas||!canvas.width||canvas.style.display==='none'){identityMessage('La fotografía aún no termina de procesarse. Espera a que cargue y vuelve a intentarlo.',true);return}
+ try{
+  canvas.toBlob(function(blob){
+   if(!blob){identityMessage('No se pudo crear el PNG. Prueba otra fotografía.',true);return}
+   const d=Object.assign({},IDENTITY_DEFAULTS,S.identityStudio||{});
+   const slug=String(d.name||'marca').normalize('NFD').replace(/[\\u0300-\\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'')||'marca';
+   const a=document.createElement('a'),url=URL.createObjectURL(blob);a.href=url;a.download='assosiated-'+slug+'-foto-editada.png';document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(url)},1200);
+   identityMessage('PNG generado con los colores y la marca compuestos sobre la fotografía.',false);
+  },'image/png');
+ }catch(e){identityMessage('El navegador bloqueó la exportación. Recarga la vista y vuelve a intentarlo.',true)}
 }
 function identityPhotoFallback(img){
  const scene=img&&img.closest?img.closest('.id-scene'):null;
@@ -792,7 +816,7 @@ function identityPhotoMarkup(d,p,t,i){
  html+='<img class="id-scene-photo" crossorigin="anonymous" src="'+E(p.url)+'" alt="'+E(p.title)+'" loading="lazy" decoding="async" referrerpolicy="no-referrer" onload="identityPaintScene(this.parentElement)" onerror="identityPhotoFallback(this)">';
  html+='<canvas class="id-photo-composite" aria-hidden="true"></canvas><div class="id-scene-filter"></div>';
  html+='<div class="id-scene-brand"><div class="id-brand-lockup"><span class="id-logo-slot" data-id-logo><span>'+E(identityInitials(d.name))+'</span></span><span class="id-brand-text"><b class="id-brand-name">'+E(d.name)+'</b><small class="id-brand-tagline">'+E(tag)+'</small></span></div><div class="id-scene-copy"><span class="id-scene-overline">'+E(sz.label)+'</span><h3 class="id-scene-heading">'+E(t.type==='product'?d.name:(tag||sz.headline))+'</h3><p class="id-scene-description">'+E(offer)+'</p><span class="id-scene-cta">'+E(t.type==='web'?'Conocer la marca ↗':t.type==='product'?'Hecho con intención':t.type==='sign'?'Calidad · Servicio':'Descubre más ↗')+'</span></div></div>';
- html+='<span class="id-scene-index">'+E(t.kind)+'</span></figure><div class="id-mock-meta"><b class="id-mock-title">'+E(t.name)+'</b><span class="id-credit">Foto: <a href="'+E(p.source)+'" target="_blank" rel="noopener noreferrer">'+E(p.credit)+' · Unsplash ↗</a></span></div></article>';
+ html+='<span class="id-scene-index">'+E(t.kind)+'</span></figure><div class="id-mock-meta"><b class="id-mock-title">'+E(t.name)+'</b><span class="id-credit">Foto: <a href="'+E(p.source)+'" target="_blank" rel="noopener noreferrer">'+E(p.credit)+' · Unsplash ↗</a></span><button class="id-export-photo" type="button" onclick="identityDownloadPhoto(this)" title="Descargar la fotografía editada">Descargar foto editada ↓</button></div></article>';
  return html;
 }
 
