@@ -1,41 +1,48 @@
-# Publicación de las cuatro webs
+# Publicación de las webs
 
-## Separación de marcas
+## Las webs y la separación de marcas
 
-- **ASSOSIATED — sitio corporativo:** `docs/index.html`
-- **ASSOSIATED — definición guiada de identidad:** `docs/identidad.html`
+- **ASSOSIATED — sitio corporativo + Brand Studio integrado:** `docs/index.html`
+- **Alias de compatibilidad para el antiguo enlace de identidad:** `docs/identidad.html` (redirige a `index.html#studio`)
 - **Shalom — sitio del restaurante:** `docs/shalom.html`
 - **Shalom — catálogo y solicitud de pedidos:** `docs/shalom-tienda.html`
 
-El panel administrativo interno sigue siendo `ASSOSIATED_163.html`; no es la página pública corporativa.
+La definición de identidad es parte de la página principal de ASSOSIATED; no es una marca ni un servicio web separado. La página de Shalom y su tienda son exclusivamente de Shalom.
 
-**Nota de seguridad:** el repositorio de GitHub es público. Publicar desde `docs` excluye el panel del sitio de GitHub Pages, pero no oculta del repositorio sus archivos de la raíz. No guardes contraseñas, claves de API ni información confidencial en esos archivos. El panel debe migrarse a un repositorio privado o a un backend con autenticación real antes de manejar datos sensibles.
+El panel interno `ASSOSIATED_163.html` no está dentro de `docs` y no debe enlazarse desde la navegación pública.
 
-## Activar publicación con GitHub Pages
+## Qué contiene Brand Studio
 
-1. Abre el repositorio en GitHub: https://github.com/erickramonsanchez8-maker/assosiated
-2. Entra en **Settings** → **Pages**.
-3. En **Build and deployment**, elige **Deploy from a branch**.
-4. Selecciona la rama **main** y la carpeta **/docs**. Guarda los cambios.
-5. Espera a que GitHub marque la publicación como exitosa en esa misma pantalla.
+- Brief de marca editable con nombre, tagline, sector, audiencia, propuesta, diferenciador y personalidad.
+- Paletas iniciales y edición manual de cuatro colores.
+- Carga local de logo PNG/JPG/WebP con vista previa en seis aplicaciones: tarjeta, post social, empaque/vaso, página web, fachada y papelería.
+- Tres orientaciones tipográficas, comprobación orientativa de contraste y síntesis de posicionamiento preliminar.
+- Guardado de borrador en el almacenamiento local del navegador, exportación de proyecto JSON y vista de impresión para guardar como PDF.
 
-## URLs esperadas después de activar Pages
+El logo y las respuestas se procesan en el navegador; no se envían a un servidor. Los mockups son previsualizaciones de dirección creativa, no fotografías de producción. El posicionamiento generado es una hipótesis y debe validarse con el cliente y su público. El almacenamiento local no equivale a una base de datos multiusuario ni sincroniza entre dispositivos.
 
-- ASSOSIATED: `https://erickramonsanchez8-maker.github.io/assosiated/`
-- Definición de identidad ASSOSIATED: `https://erickramonsanchez8-maker.github.io/assosiated/identidad.html`
-- Sitio de Shalom: `https://erickramonsanchez8-maker.github.io/assosiated/shalom.html`
+## Activar GitHub Pages
+
+1. Abre el repositorio: https://github.com/erickramonsanchez8-maker/assosiated
+2. Entra en **Settings → Pages**.
+3. En **Build and deployment**, selecciona **Deploy from a branch**.
+4. Selecciona la rama **main** y la carpeta **/docs**.
+5. Guarda y confirma que GitHub muestre un despliegue exitoso.
+
+El archivo `docs/.nojekyll` indica que el sitio estático no necesita procesamiento de Jekyll. Solo se publica la carpeta `docs`.
+
+## URL esperadas cuando Pages esté activo
+
+- ASSOSIATED + Brand Studio: `https://erickramonsanchez8-maker.github.io/assosiated/`
+- Acceso directo al estudio: `https://erickramonsanchez8-maker.github.io/assosiated/#studio`
+- Shalom: `https://erickramonsanchez8-maker.github.io/assosiated/shalom.html`
 - Tienda de Shalom: `https://erickramonsanchez8-maker.github.io/assosiated/shalom-tienda.html`
 
-Estas direcciones son las esperadas una vez habilitada la publicación; la existencia de los archivos no confirma por sí sola que el sitio ya esté desplegado.
+Estas direcciones son las previstas; la existencia de los archivos no demuestra por sí sola que Pages ya esté desplegado.
 
-Si la fuente de publicación ya está configurada, los cambios en la rama `main` se publicarán automáticamente. El archivo `docs/.nojekyll` indica que el sitio contiene páginas estáticas y no necesita que Jekyll procese el sitio. Solo se publican los cuatro archivos de `docs`; el panel interno que está en la raíz queda fuera de esa publicación.
+## Pendientes antes de lanzamiento comercial
 
-## Antes de anunciar las páginas al público
-
-- La página de Shalom conserva textos de menú que estaban marcados como ejemplos. El restaurante debe confirmar nombres, precios, fotografías, horarios, dirección y teléfono.
-- La tienda permite seleccionar artículos y preparar una solicitud, pero no procesa pagos. Su número de WhatsApp está vacío hasta que Shalom confirme el número oficial.
-- Para aceptar pagos en línea, almacenar pedidos en una base de datos o administrar entregas, hace falta integrar un proveedor de pagos y un backend seguro.
-- La definición de identidad genera una base preliminar en el navegador y permite imprimir/guardar un PDF o descargar las respuestas JSON; no es todavía un panel multiusuario ni un servicio de almacenamiento central.
-- `ASSOSIATED_163.html` continúa siendo una aplicación interna separada. Sus cuentas y datos siguen dependiendo del navegador; no la uses como autenticación central de los cuatro sitios.
-
-No se han inventado datos comerciales ni se presentan solicitudes como compras o reservas confirmadas.
+- Shalom debe validar nombres y descripciones del menú, precios, horarios, dirección, teléfono, fotos reales y número oficial de WhatsApp. La página existente identifica parte del menú como contenido de ejemplo.
+- La tienda permite preparar una solicitud, pero aún no procesa cobros ni registra pedidos en una base de datos central. Para vender y gestionar pedidos de forma segura hace falta integrar un backend y un proveedor de pagos.
+- El repositorio de GitHub es público. Configurar Pages para servir solo `/docs` no hace privados los archivos de la raíz. No se deben guardar claves, contraseñas ni datos sensibles en el repositorio.
+- El panel `ASSOSIATED_163.html` mantiene datos y autenticación ligados al navegador; no es la autenticación central de estas webs y no debe manejar información sensible hasta migrar a un backend seguro.
