@@ -784,7 +784,7 @@ function identityDownloadPhoto(button){
   canvas.toBlob(function(blob){
    if(!blob){identityMessage('No se pudo crear el PNG. Prueba otra fotografía.',true);return}
    const d=Object.assign({},IDENTITY_DEFAULTS,S.identityStudio||{});
-   const slug=String(d.name||'marca').normalize('NFD').replace(/[\\u0300-\\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'')||'marca';
+   const slug=String(d.name||'marca').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'')||'marca';
    const a=document.createElement('a'),url=URL.createObjectURL(blob);a.href=url;a.download='assosiated-'+slug+'-foto-editada.png';document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(url)},1200);
    identityMessage('PNG generado con los colores y la marca compuestos sobre la fotografía.',false);
   },'image/png');
