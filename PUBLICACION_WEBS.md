@@ -9,6 +9,8 @@
 
 El panel administrativo interno sigue siendo `ASSOSIATED_163.html`; no es la página pública corporativa.
 
+**Nota de seguridad:** el repositorio de GitHub es público. Publicar desde `docs` excluye el panel del sitio de GitHub Pages, pero no oculta del repositorio sus archivos de la raíz. No guardes contraseñas, claves de API ni información confidencial en esos archivos. El panel debe migrarse a un repositorio privado o a un backend con autenticación real antes de manejar datos sensibles.
+
 ## Activar publicación con GitHub Pages
 
 1. Abre el repositorio en GitHub: https://github.com/erickramonsanchez8-maker/assosiated
