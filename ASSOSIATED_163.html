@@ -471,6 +471,17 @@ button:active,.btn:active{transform:scale(.985)}
  .id-mock-card,.id-mock-card--hero{grid-column:span 2}
 }
 
+
+/* Keep the first-run preview balanced inside its one-column layout */
+.onboarding-workspace .id-mock-grid{grid-template-columns:minmax(0,1fr)!important}
+.onboarding-workspace .id-mock-card,.onboarding-workspace .id-mock-card--hero{grid-column:span 1;max-width:100%}
+.onboarding-workspace .id-mock-card .id-scene{aspect-ratio:1.55/1;min-height:280px}
+.onboarding-workspace .id-mock-card .id-scene-brand{inset:20px}
+@media(max-width:620px){
+ .onboarding-workspace .id-mock-card .id-scene{aspect-ratio:1.18/1;min-height:235px}
+ .onboarding-workspace .id-mock-card .id-scene-brand{inset:15px}
+}
+
 </style></head><body>
 <header class="hd"><div class="hb"><div class="logo">ASSOSIATED<i>163</i></div><div class="hr"><span class="who" id="who"></span><button class="lw" onclick="pal()" title="Ctrl+K">Buscar</button><button class="lw" onclick="pres()">Presentar</button><button class="btn" onclick="formC()">+ Nueva campaña</button><button class="gr" id="gear" onclick="go('s')" aria-label="Configuración" title="Configuración"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button><button class="lw" onclick="logout()">Salir</button></div></div><div class="tw"><nav class="tabs" id="nav" aria-label="Principal"></nav></div></header><main class="main" id="main"></main>
 <dialog id="dlg"></dialog><div id="toast" role="status"></div>
@@ -999,6 +1010,15 @@ function identityUpdate(repaint){
   let font='"Cormorant Garamond",Georgia,serif';
   if(d.font==='modern')font='Manrope,sans-serif';else if(d.font==='classic')font='Georgia,"Times New Roman",serif';else if(d.font==='bold')font='800 Manrope,sans-serif';
   root.style.setProperty('--id-font',font);
+ }
+ const boardRoot=$('#main .id-brand-board');
+ if(boardRoot){
+  boardRoot.style.setProperty('--id-primary',d.primary);
+  boardRoot.style.setProperty('--id-secondary',d.secondary);
+  boardRoot.style.setProperty('--id-accent',d.accent);
+  boardRoot.style.setProperty('--id-paper',d.paper);
+  boardRoot.style.setProperty('--id-ink',identityInk(d.primary));
+  boardRoot.style.setProperty('--id-font',d.font==='modern'?'Manrope,sans-serif':d.font==='classic'?'Georgia,"Times New Roman",serif':d.font==='bold'?'800 Manrope,sans-serif':'"Cormorant Garamond",Georgia,serif');
  }
  ['idHexPrimary','idHexSecondary','idHexAccent','idHexPaper'].forEach(function(id,i){const el=$('#'+id);if(el)el.textContent=[d.primary,d.secondary,d.accent,d.paper][i]});
  const setText=(selector,text)=>document.querySelectorAll('#main '+selector).forEach(function(el){el.textContent=text});
