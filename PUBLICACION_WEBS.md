@@ -2,8 +2,8 @@
 
 ## Las webs y la separación de marcas
 
-- **ASSOSIATED — sitio corporativo + Brand Studio integrado:** `docs/index.html`
-- **Alias de compatibilidad para el antiguo enlace de identidad:** `docs/identidad.html` (redirige a `index.html#studio`)
+- **ASSOSIATED — sitio corporativo + Brand Studio integrado:** `docs/hearth.html` (con `docs/index.html` como entrada que redirige a `hearth.html`)
+- **Alias de compatibilidad para el antiguo enlace de identidad:** `docs/identidad.html` (redirige a `hearth.html#studio`)
 - **Shalom — sitio del restaurante:** `docs/shalom.html`
 - **Shalom — catálogo y solicitud de pedidos:** `docs/shalom-tienda.html`
 
@@ -34,7 +34,7 @@ El archivo `docs/.nojekyll` indica que el sitio estático no necesita procesamie
 ## URL esperadas cuando Pages esté activo
 
 - ASSOSIATED + Brand Studio: `https://erickramonsanchez8-maker.github.io/assosiated/`
-- Acceso directo al estudio: `https://erickramonsanchez8-maker.github.io/assosiated/#studio`
+- Acceso directo al estudio: `https://erickramonsanchez8-maker.github.io/assosiated/hearth.html#studio`
 - Shalom: `https://erickramonsanchez8-maker.github.io/assosiated/shalom.html`
 - Tienda de Shalom: `https://erickramonsanchez8-maker.github.io/assosiated/shalom-tienda.html`
 
