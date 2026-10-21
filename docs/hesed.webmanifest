@@ -1,0 +1,21 @@
+{
+  "id": "./hesed.html",
+  "name": "HESED · Centro de operaciones",
+  "short_name": "HESED",
+  "description": "Sistema administrativo privado para SHALOM, BEFIT y LA HUERTA.",
+  "lang": "es-MX",
+  "start_url": "./hesed.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#0b1420",
+  "theme_color": "#142b45",
+  "icons": [
+    {
+      "src": "https://raw.githubusercontent.com/erickramonsanchez8-maker/assosiated/main/logo%20hesed.jpg",
+      "sizes": "any",
+      "type": "image/jpeg",
+      "purpose": "any"
+    }
+  ]
+}
