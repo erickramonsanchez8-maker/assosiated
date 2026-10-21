@@ -2,7 +2,7 @@
 
 ## Mapa de proyectos
 - **ASSOCIATED**: portal de acceso y futura capa común de autenticación, permisos y navegación.
-- **SHALOM**: restaurante. Sitio comercial y tienda en carpeta `shalom-web/`, separados del panel operativo.
+- **SHALOM**: restaurante. Sitio comercial y tienda en `shalom-web/`, separados del panel operativo.
 - **BEFIT**: módulo inicial en `docs/befit.html` para registrar socios, gastos, campañas y objetivos; permite exportar CSV y respaldo JSON. Actualmente usa almacenamiento local.
 - **LA HUERTA / AGROVA — Mi Parcela**: acceso en `docs/hesed-huerta.html` a una copia del HTML existente. Sus funciones originales no se han sustituido.
 
