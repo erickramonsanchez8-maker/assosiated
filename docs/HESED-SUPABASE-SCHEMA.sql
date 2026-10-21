@@ -217,14 +217,14 @@ grant select,insert on public.audit_logs to authenticated;
 create or replace function public.handle_new_auth_user()
 returns trigger language plpgsql security definer
 set search_path = public
-as $
+as $$
 begin
   insert into public.profiles(user_id, display_name, platform_role)
   values (new.id, coalesce(new.raw_user_meta_data->>'display_name',''), 'user')
   on conflict (user_id) do nothing;
   return new;
 end;
-$;
+$$;
 
 drop trigger if exists on_auth_user_created_profile on auth.users;
 create trigger on_auth_user_created_profile
@@ -242,7 +242,7 @@ grant insert,update,delete on public.memberships to authenticated;
 create or replace function public.enforce_same_business_references()
 returns trigger language plpgsql
 set search_path = public
-as $
+as $$
 begin
   if new.branch_id is not null and not exists (
     select 1 from public.branches b
@@ -258,7 +258,7 @@ begin
   end if;
   return new;
 end;
-$;
+$$;
 
 drop trigger if exists expenses_same_business_refs on public.expenses;
 create trigger expenses_same_business_refs
@@ -293,14 +293,14 @@ create table if not exists public.farm_activities (
 create or replace function public.enforce_farm_plot_business()
 returns trigger language plpgsql
 set search_path = public
-as $
+as $$
 begin
   if not exists (select 1 from public.farm_plots p where p.id = new.plot_id and p.business_id = new.business_id) then
     raise exception 'plot_id must belong to the same business';
   end if;
   return new;
 end;
-$;
+$$;
 drop trigger if exists farm_activity_same_business on public.farm_activities;
 create trigger farm_activity_same_business
 before insert or update on public.farm_activities
@@ -398,6 +398,6 @@ begin
     raise notice 'Publication supabase_realtime was not found; enable Realtime for required tables in Supabase Dashboard.';
   end if;
 end;
-$;
+$$;
 
 commit;
