@@ -213,4 +213,164 @@ grant select on public.businesses, public.profiles, public.memberships to authen
 grant select,insert,update,delete on public.branches, public.expenses, public.campaigns, public.goals, public.gym_members to authenticated;
 grant select,insert on public.audit_logs to authenticated;
 
+-- User profile bootstrap; prevents signup from assigning privileged roles.
+create or replace function public.handle_new_auth_user()
+returns trigger language plpgsql security definer
+set search_path = public
+as $
+begin
+  insert into public.profiles(user_id, display_name, platform_role)
+  values (new.id, coalesce(new.raw_user_meta_data->>'display_name',''), 'user')
+  on conflict (user_id) do nothing;
+  return new;
+end;
+$;
+
+drop trigger if exists on_auth_user_created_profile on auth.users;
+create trigger on_auth_user_created_profile
+after insert on auth.users
+for each row execute procedure public.handle_new_auth_user();
+
+-- Administrative membership management is server-enforced.
+drop policy if exists "platform admins manage memberships" on public.memberships;
+create policy "platform admins manage memberships" on public.memberships
+for all to authenticated using (public.is_platform_admin())
+with check (public.is_platform_admin());
+grant insert,update,delete on public.memberships to authenticated;
+
+-- Ensure references do not cross business boundaries.
+create or replace function public.enforce_same_business_references()
+returns trigger language plpgsql
+set search_path = public
+as $
+begin
+  if new.branch_id is not null and not exists (
+    select 1 from public.branches b
+    where b.id = new.branch_id and b.business_id = new.business_id
+  ) then
+    raise exception 'branch_id must belong to the same business';
+  end if;
+  if new.campaign_id is not null and not exists (
+    select 1 from public.campaigns c
+    where c.id = new.campaign_id and c.business_id = new.business_id
+  ) then
+    raise exception 'campaign_id must belong to the same business';
+  end if;
+  return new;
+end;
+$;
+
+drop trigger if exists expenses_same_business_refs on public.expenses;
+create trigger expenses_same_business_refs
+before insert or update on public.expenses
+for each row execute procedure public.enforce_same_business_references();
+
+-- Agricultural records for LA HUERTA; Mi Parcela remains a separate frontend
+-- until its current local data model is migrated and mapped deliberately.
+create table if not exists public.farm_plots (
+  id uuid primary key default gen_random_uuid(),
+  business_id uuid not null references public.businesses(id) on delete cascade,
+  name text not null,
+  crop text not null default '',
+  area numeric(12,2) check (area is null or area >= 0),
+  area_unit text not null default 'ha',
+  status text not null default 'active' check (status in ('active','resting','closed')),
+  notes text not null default '',
+  created_at timestamptz not null default now(),
+  unique(business_id,name)
+);
+create table if not exists public.farm_activities (
+  id uuid primary key default gen_random_uuid(),
+  business_id uuid not null references public.businesses(id) on delete cascade,
+  plot_id uuid not null references public.farm_plots(id) on delete cascade,
+  activity_type text not null,
+  activity_date date not null default current_date,
+  notes text not null default '',
+  cost numeric(12,2) not null default 0 check (cost >= 0),
+  created_by uuid not null default auth.uid() references auth.users(id),
+  created_at timestamptz not null default now()
+);
+create or replace function public.enforce_farm_plot_business()
+returns trigger language plpgsql
+set search_path = public
+as $
+begin
+  if not exists (select 1 from public.farm_plots p where p.id = new.plot_id and p.business_id = new.business_id) then
+    raise exception 'plot_id must belong to the same business';
+  end if;
+  return new;
+end;
+$;
+drop trigger if exists farm_activity_same_business on public.farm_activities;
+create trigger farm_activity_same_business
+before insert or update on public.farm_activities
+for each row execute procedure public.enforce_farm_plot_business();
+
+alter table public.farm_plots enable row level security;
+alter table public.farm_activities enable row level security;
+drop policy if exists "farm plots read by business" on public.farm_plots;
+create policy "farm plots read by business" on public.farm_plots
+for select to authenticated using (
+  public.can_access_business(business_id) and
+  exists(select 1 from public.businesses b where b.id=business_id and b.slug='la-huerta')
+);
+drop policy if exists "farm plots write by business managers" on public.farm_plots;
+create policy "farm plots write by business managers" on public.farm_plots
+for all to authenticated using (
+  public.can_manage_business(business_id) and
+  exists(select 1 from public.businesses b where b.id=business_id and b.slug='la-huerta')
+) with check (
+  public.can_manage_business(business_id) and
+  exists(select 1 from public.businesses b where b.id=business_id and b.slug='la-huerta')
+);
+drop policy if exists "farm activities read by business" on public.farm_activities;
+create policy "farm activities read by business" on public.farm_activities
+for select to authenticated using (
+  public.can_access_business(business_id) and
+  exists(select 1 from public.businesses b where b.id=business_id and b.slug='la-huerta')
+);
+drop policy if exists "farm activities write by business managers" on public.farm_activities;
+create policy "farm activities write by business managers" on public.farm_activities
+for all to authenticated using (
+  public.can_manage_business(business_id) and
+  exists(select 1 from public.businesses b where b.id=business_id and b.slug='la-huerta')
+) with check (
+  public.can_manage_business(business_id) and
+  exists(select 1 from public.businesses b where b.id=business_id and b.slug='la-huerta')
+);
+grant select,insert,update,delete on public.farm_plots, public.farm_activities to authenticated;
+
+-- Restaurant reservation records; payment processing is intentionally absent.
+create table if not exists public.shalom_reservations (
+  id uuid primary key default gen_random_uuid(),
+  business_id uuid not null references public.businesses(id) on delete cascade,
+  branch_id uuid references public.branches(id) on delete set null,
+  customer_name text not null,
+  customer_phone text not null default '',
+  party_size integer not null check (party_size between 1 and 30),
+  reservation_at timestamptz not null,
+  status text not null default 'requested' check (status in ('requested','confirmed','cancelled','completed')),
+  notes text not null default '',
+  created_by uuid default auth.uid() references auth.users(id),
+  created_at timestamptz not null default now(),
+  check (business_id is not null)
+);
+alter table public.shalom_reservations enable row level security;
+drop policy if exists "shalom reservations read by business" on public.shalom_reservations;
+create policy "shalom reservations read by business" on public.shalom_reservations
+for select to authenticated using (
+  public.can_access_business(business_id) and
+  exists(select 1 from public.businesses b where b.id=business_id and b.slug='shalom')
+);
+drop policy if exists "shalom reservations manage by business managers" on public.shalom_reservations;
+create policy "shalom reservations manage by business managers" on public.shalom_reservations
+for all to authenticated using (
+  public.can_manage_business(business_id) and
+  exists(select 1 from public.businesses b where b.id=business_id and b.slug='shalom')
+) with check (
+  public.can_manage_business(business_id) and
+  exists(select 1 from public.businesses b where b.id=business_id and b.slug='shalom')
+);
+grant select,insert,update,delete on public.shalom_reservations to authenticated;
+
 commit;
