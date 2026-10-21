@@ -1,32 +1,34 @@
-# HESED — pendientes para liberar a producción
+# HESED — pendientes para liberar el sistema administrativo
 
-Este documento separa lo que ya está en el repositorio de lo que requiere acceso del propietario o decisiones de negocio.
+## Alcance confirmado
+- Los únicos usuarios son los dos propietarios; ambos administran SHALOM, BEFIT y LA HUERTA.
+- El objetivo es que puedan instalar HESED en sus dispositivos y compartir la misma información con sincronización en tiempo real.
+- El sitio público de SHALOM, su tienda electrónica y las reservas de clientes quedan fuera del trabajo prioritario actual.
 
-## Requiere una acción del propietario
+## Bloqueadores reales para producción
 
-### 1. Repositorio independiente de SHALOM
-Crear un repositorio vacío llamado `shalom-web` en GitHub. El conector de GitHub disponible en esta sesión no tiene una operación para crear repositorios nuevos. Después de crearlo, se podrá trasladar `shalom-web/index.html`, `shalom-web/shalom-tienda.html` y el README a su raíz, copiar el logotipo y configurar GitHub Pages.
+### 1. Proyecto backend
+Crear un proyecto Supabase dedicado a HESED, aplicar el esquema SQL actualizado y verificar que las funciones, políticas RLS y publicación Realtime se hayan creado correctamente.
 
-### 2. Proyecto de backend
-Crear un proyecto Supabase dedicado a HESED. Aplicar y revisar `HESED-SUPABASE-SCHEMA.sql` en el SQL Editor. Compartir únicamente la URL del proyecto y la clave pública anon/publishable si se quiere que prepare la conexión frontend. **Nunca enviar la clave `service_role`, contraseñas ni tokens privados.**
+### 2. Acceso exclusivo para propietarios
+Desactivar el registro público en Supabase Auth e invitar solo las dos cuentas de propietarios. Después de crear ambas cuentas, asignarles el rol administrativo desde el SQL Editor. No se deben compartir contraseñas ni claves privadas en el chat.
 
-### 3. Datos oficiales de SHALOM
-- Dirección y enlace de Google Maps.
-- WhatsApp internacional (solo dígitos con lada), teléfono e Instagram.
-- Horarios oficiales de brunch y dinner.
-- Carta real con nombres, descripciones, precios, disponibilidad y fotografías autorizadas.
-- Confirmación de si reservas y pedidos deben abrir WhatsApp o si necesitan una bandeja de pedidos dentro de HESED.
+### 3. Conectar los módulos existentes
+El portal HESED tiene ahora un manifiesto PWA, un icono y un service worker básico. Esto prepara la instalación desde navegadores compatibles, pero no sincroniza los datos todavía.
+- Conectar SHALOM administrativo, BEFIT y LA HUERTA / Mi Parcela con Supabase Auth, PostgreSQL y Realtime.
+- Sustituir el guardado local de BEFIT por operaciones en la base central.
+- Proteger cada módulo, no solo la pantalla de inicio, con sesión y autorización en servidor.
+- No borrar ni sobrescribir los datos locales existentes durante la migración.
 
-### 4. Datos operativos de BEFIT y LA HUERTA
-- Nombre de las sucursales y planes reales de BEFIT.
-- Qué datos del socio se deben guardar y quién puede verlos.
-- Campos reales de parcelas, cultivos, labores, cosechas, inventario y costos de La Huerta. No migrar registros de Mi Parcela automáticamente hasta mapearlos.
+### 4. Validación
+- Confirmar que solo las dos cuentas invitadas pueden entrar.
+- Verificar que los dos propietarios accedan a los tres negocios.
+- Probar desde dos o más dispositivos que los cambios confirmados aparezcan en los demás en segundos.
+- Probar pérdida de conexión y recuperación, respaldo/exportación, y aislamiento entre negocios.
+- Realizar pruebas visuales y funcionales en escritorio, tablet y móvil.
 
-## Trabajo ya preparado en el repositorio
-- Portal central HESED y copias del panel ASSOCIATED y Mi Parcela.
-- Módulo inicial BEFIT con socios, gastos, campañas, objetivos, CSV y respaldo JSON local.
-- Esquema inicial de base de datos con separación por negocio y políticas RLS.
-- Sitio principal y tienda de SHALOM en una carpeta separada, con enlaces y logos actualizados.
+## Fuera del alcance por ahora
+La separación del sitio público de SHALOM en un repositorio independiente, el menú comercial, las reservas públicas y el e-commerce no bloquean el desarrollo del sistema administrativo y no deben distraer de la prioridad actual.
 
 ## No declarar listo para producción todavía
-La autenticación central y la base de datos no están desplegadas ni conectadas a los frontends. BEFIT aún guarda en el navegador. No se han ejecutado pruebas visuales de navegador ni pruebas de seguridad contra un backend real.
+El backend aún no está desplegado y los módulos administrativos no están conectados a una base de datos compartida. No se han ejecutado pruebas reales de navegador ni pruebas de seguridad contra un proyecto Supabase activo.
