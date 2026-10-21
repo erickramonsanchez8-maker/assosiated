@@ -42,7 +42,7 @@ form('goalForm','goals',()=>({name:$('goalName').value.trim(),target:Number($('g
 document.addEventListener('click',e=>{const b=e.target.closest('[data-remove]');if(b&&confirm('¿Eliminar este registro local?')){data[b.dataset.remove]=data[b.dataset.remove].filter(x=>x.id!==b.dataset.id);save();render()}});
 function csvEscape(v){return '"'+String(v??'').replace(/"/g,'""')+'"'}
 function download(name,content,type){const a=document.createElement('a');const url=URL.createObjectURL(new Blob([content],{type}));a.href=url;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000)}
-document.querySelectorAll('[data-export]').forEach(b=>b.addEventListener('click',()=>{const rows=data[b.dataset.export];if(!rows.length){alert('No hay registros que exportar.');return}const keys=Object.keys(rows[0]);download('befit-'+b.dataset.export+'.csv',[keys.map(csvEscape).join(','),...rows.map(r=>keys.map(k=>csvEscape(r[k])).join(','))].join('\r\n'),'text/csv;charset=utf-8'})));
+document.querySelectorAll('[data-export]').forEach(b=>b.addEventListener('click',()=>{const rows=data[b.dataset.export];if(!rows.length){alert('No hay registros que exportar.');return}const keys=Object.keys(rows[0]);download('befit-'+b.dataset.export+'.csv',[keys.map(csvEscape).join(','),...rows.map(r=>keys.map(k=>csvEscape(r[k])).join(','))].join('\r\n'),'text/csv;charset=utf-8');}));
 $('backupAll').addEventListener('click',()=>download('befit-respaldo.json',JSON.stringify({version:1,exportedAt:new Date().toISOString(),data},null,2),'application/json'));
 render();
 })();
