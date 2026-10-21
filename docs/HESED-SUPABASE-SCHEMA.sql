@@ -373,4 +373,31 @@ for all to authenticated using (
 );
 grant select,insert,update,delete on public.shalom_reservations to authenticated;
 
+
+-- Enable Postgres Changes for records that should refresh across owners' devices.
+-- Supabase projects normally provide the supabase_realtime publication.
+do $
+declare
+  tbl text;
+begin
+  if exists (select 1 from pg_publication where pubname = 'supabase_realtime') then
+    foreach tbl in array array[
+      'branches','expenses','campaigns','goals','gym_members',
+      'farm_plots','farm_activities','shalom_reservations'
+    ] loop
+      if not exists (
+        select 1 from pg_publication_tables
+        where pubname = 'supabase_realtime'
+          and schemaname = 'public'
+          and tablename = tbl
+      ) then
+        execute format('alter publication supabase_realtime add table public.%I', tbl);
+      end if;
+    end loop;
+  else
+    raise notice 'Publication supabase_realtime was not found; enable Realtime for required tables in Supabase Dashboard.';
+  end if;
+end;
+$;
+
 commit;
