@@ -12,10 +12,10 @@
   "theme_color": "#142b45",
   "icons": [
     {
-      "src": "https://raw.githubusercontent.com/erickramonsanchez8-maker/assosiated/main/logo%20hesed.jpg",
+      "src": "./hesed-icon.svg",
       "sizes": "any",
-      "type": "image/jpeg",
-      "purpose": "any"
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
     }
   ]
 }
