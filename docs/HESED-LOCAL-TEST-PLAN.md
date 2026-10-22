@@ -45,6 +45,10 @@ Validar primero la experiencia local de HESED antes de conectar Supabase. Esta l
 | LOC-16 | Exportar CSV de BEFIT con texto que comience por `=`, `+`, `-` o `@` | El CSV neutraliza esas celdas para reducir el riesgo de que Excel/hojas de cálculo las interpreten como fórmulas. |
 | LOC-17 | Eliminar un socio con asistencias o pagos vinculados | El sistema pide confirmación y elimina también los registros dependientes para no dejar referencias huérfanas. |
 | LOC-18 | Abrir BEFIT desde HESED_LOCAL y volver con el enlace superior | El retorno conduce a HESED_LOCAL; si BEFIT se abre desde el directorio de `docs/`, el retorno conduce a ese directorio. |
+| LOC-19 | Hacer corte de caja con ingresos y gastos de efectivo | Para una fecha y sucursal, el efectivo esperado es fondo inicial + pagos en efectivo − gastos en efectivo; la diferencia es efectivo contado − esperado. |
+| LOC-20 | Hacer corte con pagos por transferencia/tarjeta | Esos pagos no incrementan el efectivo esperado, aunque aparecen dentro del total de todos los métodos para referencia. |
+| LOC-21 | Guardar, exportar y restaurar cortes de caja | El historial de cortes persiste, se exporta a CSV y se conserva al restaurar un respaldo BEFIT nuevo. Los respaldos anteriores abren con historial vacío. |
+| LOC-22 | Revisar datos antiguos sin método/sucursal | Los registros históricos incompletos no deben contarse como efectivo ni asignarse automáticamente a una sucursal; se revisan antes del corte. |
 
 ## Límites que deben permanecer visibles
 
