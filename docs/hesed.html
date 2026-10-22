@@ -13,7 +13,19 @@
 @media(max-width:780px){.grid{grid-template-columns:1fr}.card{min-height:230px}.hero{padding-top:38px}.top{align-items:flex-start}.pill{max-width:140px;text-align:center}}
 @media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
 </style>
-</head>
+<style>
+:root{color-scheme:dark;--bg:#20211d;--panel:#292a24;--line:#49463c;--text:#f7f2e8;--muted:#b8b09f;--gold:#b59a68;--blue:#c8b58e;--green:#91aa92}
+body{background:radial-gradient(ellipse at 78% -12%,rgba(181,154,104,.15),transparent 44%),radial-gradient(ellipse at 0% 100%,rgba(110,128,103,.1),transparent 34%),var(--bg)}
+.top{border-bottom-color:#ffffff16}.pill{border-color:#49463c;color:#c6bdab}.install{border-color:#b59a68;background:#353329;color:#f7f2e8}
+.card{background:linear-gradient(145deg,#30312a,#252620);border-color:#49463c;box-shadow:0 12px 34px rgba(0,0,0,.12);transition:transform .28s cubic-bezier(.2,.75,.25,1),border-color .28s ease,background .28s ease,box-shadow .28s ease}
+.card:hover{transform:translateY(-5px);border-color:#b59a68;background:linear-gradient(145deg,#39382e,#282922);box-shadow:0 22px 50px rgba(0,0,0,.23)}
+.glyph{background:rgba(181,154,104,.1);border-color:rgba(181,154,104,.24);color:#d7c39a}.sh h2,.be h2,.hu h2{color:#d7c39a}
+.link{border-top-color:#ffffff18}.link span{color:#c9b58a}
+.notice{border-color:#b59a6840;background:#b59a6810}.notice b{color:#f7f2e8}
+.card,.notice{animation:hesedPortalIn .5s cubic-bezier(.2,.75,.25,1) both}.card:nth-child(2){animation-delay:.07s}.card:nth-child(3){animation-delay:.14s}
+@keyframes hesedPortalIn{from{opacity:.55;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important}}
+</style></head>
 <body><div class="wrap">
 <header class="top"><div class="brand"><div class="mark"><img src="https://raw.githubusercontent.com/erickramonsanchez8-maker/assosiated/main/logo%20hesed.jpg" alt="Logotipo de HESED"></div><div><strong>HESED</strong><small>Centro de operaciones</small></div></div><div class="top-actions"><button class="install" id="installApp" type="button">Instalar HESED</button><a class="pill" style="color:var(--text);text-decoration:none" href="../HESED_LOCAL.html">Abrir acceso local ↗</a><div class="pill">PORTAL DE ACCESO · HESED</div></div></header>
 <main><section class="hero"><div class="eyebrow">Una visión · Tres operaciones</div><h1>Bienvenido a<br>HESED.</h1><p>Un punto de entrada para administrar y dar seguimiento a las operaciones de Shalom, Befit y La Huerta. Cada área conserva su propósito y sus herramientas especializadas.</p></section>
