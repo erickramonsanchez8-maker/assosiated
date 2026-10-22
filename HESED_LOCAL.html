@@ -1259,6 +1259,7 @@ function openHesedCompany(company){
    const account=current[username];if(!account||account.hash!==await divisionHash(password,account.salt)){err.textContent='Usuario o contraseña incorrectos para '+meta.name+'.';return}
   }
   window.HESED_DIVISION_SESSION={company,username,displayName:current[username]?.displayName||username,authenticatedAt:Date.now()};
+  try{localStorage.setItem('hesed:division-session:'+company,JSON.stringify({username,expiresAt:Date.now()+30*60*1000}))}catch(e){}
   openHesedCompanyUnlocked(company);
  });
 }
