@@ -42,6 +42,8 @@ Validar primero la experiencia local de HESED antes de conectar Supabase. Esta l
 | LOC-13 | Descargar y restaurar un respaldo JSON de BEFIT | Se recuperan socios, gastos, campañas y objetivos tras confirmar el reemplazo; el módulo valida el formato antes de restaurar. |
 | LOC-14 | Restaurar un respaldo BEFIT anterior | Se acepta el formato anterior generado por este módulo, siempre que tenga las cuatro colecciones esperadas; no se importan respaldos identificados como otra empresa. |
 | LOC-15 | Revisar sintaxis de scripts en los cinco HTML principales | Los scripts de HESED_LOCAL, portal, SHALOM, BEFIT y Mi Parcela se pueden analizar sin errores de sintaxis antes de las pruebas manuales. |
+| LOC-16 | Exportar CSV de BEFIT con texto que comience por `=`, `+`, `-` o `@` | El CSV neutraliza esas celdas para reducir el riesgo de que Excel/hojas de cálculo las interpreten como fórmulas. |
+| LOC-17 | Eliminar un socio con asistencias o pagos vinculados | El sistema pide confirmación y elimina también los registros dependientes para no dejar referencias huérfanas. |
 
 ## Límites que deben permanecer visibles
 
