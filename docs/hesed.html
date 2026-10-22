@@ -1,40 +1,196 @@
 <!doctype html>
-<html lang="es">
+<html lang="es-MX">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#142b45"><link rel="manifest" href="./hesed.webmanifest"><link rel="apple-touch-icon" href="https://raw.githubusercontent.com/erickramonsanchez8-maker/assosiated/main/logo%20hesed.jpg">
-<title>HESED | Centro de operaciones</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#20211d">
+<meta name="description" content="HESED reúne la operación administrativa de SHALOM, BEFIT y LA HUERTA en un solo punto de acceso.">
+<link rel="manifest" href="./hesed.webmanifest">
+<link rel="apple-touch-icon" href="https://raw.githubusercontent.com/erickramonsanchez8-maker/assosiated/main/logo%20hesed.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+<title>HESED — Centro de operaciones</title>
 <style>
-:root{color-scheme:dark;--bg:#0b1420;--panel:#142337;--line:#263a50;--text:#f5f3ee;--muted:#a8b7c8;--gold:#c9b8a6;--blue:#74b9ff;--green:#83c7a4}
-*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 50% -15%,#243d58 0,transparent 55%),var(--bg);color:var(--text);font-family:Inter,Segoe UI,Arial,sans-serif;min-height:100vh}
-.wrap{width:min(1120px,calc(100% - 36px));margin:auto}.top{display:flex;justify-content:space-between;align-items:center;padding:28px 0;border-bottom:1px solid #ffffff16}.brand{display:flex;gap:12px;align-items:center}.mark{width:48px;height:48px;border-radius:13px;display:grid;place-items:center;overflow:hidden;background:#fff}.mark img{width:100%;height:100%;object-fit:contain}.brand strong{font-size:15px;letter-spacing:.24em}.brand strong{font-size:15px;letter-spacing:.24em}.brand small{display:block;color:var(--muted);font-size:11px;letter-spacing:.04em;margin-top:4px}.pill{border:1px solid var(--line);border-radius:99px;padding:8px 12px;font-size:11px;color:var(--muted)}.install{display:none;border:1px solid #74b9ff;border-radius:99px;padding:9px 13px;background:#17334c;color:#f5f3ee;font:600 11px inherit;cursor:pointer}.install.ready{display:inline-flex}.top-actions{display:flex;gap:9px;align-items:center;justify-content:flex-end;flex-wrap:wrap}
-.hero{padding:54px 0 34px}.eyebrow{font-size:11px;text-transform:uppercase;letter-spacing:.2em;color:var(--gold);font-weight:700}.hero h1{font-size:clamp(36px,6vw,66px);line-height:1.02;letter-spacing:-.055em;margin:15px 0}.hero p{max-width:630px;line-height:1.7;color:var(--muted);font-size:15px}
-.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;padding:16px 0 40px}.card{position:relative;overflow:hidden;min-height:280px;border:1px solid var(--line);border-radius:22px;padding:24px;background:linear-gradient(145deg,#182a3e,#101c2b);display:flex;flex-direction:column;transition:transform .25s,border-color .25s,background .25s}.card:hover{transform:translateY(-4px);border-color:#8ba7c2;background:linear-gradient(145deg,#20364c,#111e2e)}.glyph{width:44px;height:44px;border-radius:14px;display:grid;place-items:center;font-size:22px;background:#ffffff0b;border:1px solid #ffffff16}.card h2{font-size:23px;letter-spacing:-.035em;margin:24px 0 8px}.card p{font-size:13px;line-height:1.65;color:var(--muted);margin:0 0 22px}.meta{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);margin-top:auto;padding-bottom:15px}.link{display:flex;justify-content:space-between;align-items:center;text-decoration:none;color:var(--text);font-weight:650;font-size:12px;border-top:1px solid #ffffff17;padding-top:15px}.link span{font-size:18px;transition:transform .2s}.link:hover span{transform:translateX(4px)}.sh h2{color:#e1cdb6}.be h2{color:#9fd7c0}.hu h2{color:#b5d89a}.notice{display:flex;gap:12px;border:1px solid #c9b8a633;background:#c9b8a60a;border-radius:14px;padding:15px 17px;color:var(--muted);font-size:12px;line-height:1.6}.notice b{color:var(--text)}footer{border-top:1px solid #ffffff16;padding:22px 0 32px;color:#8294a8;font-size:11px;display:flex;justify-content:space-between;gap:15px;flex-wrap:wrap}
-@media(max-width:780px){.grid{grid-template-columns:1fr}.card{min-height:230px}.hero{padding-top:38px}.top{align-items:flex-start}.pill{max-width:140px;text-align:center}}
-@media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+:root{
+ color-scheme:dark;
+ --ink:#f5f1e8;
+ --muted:#b7b1a4;
+ --paper:#20211d;
+ --panel:#282923;
+ --panel-soft:#24251f;
+ --line:#48473e;
+ --accent:#b59a68;
+ --accent-light:#d4c19a;
+ --green:#a8b69b;
+ --serif:"Playfair Display",Georgia,serif;
+ --sans:"DM Sans",sans-serif;
+ --page:min(1180px,calc(100% - 64px));
+ --ease:cubic-bezier(.22,.72,.22,1);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:24px}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:14px;line-height:1.65;min-height:100vh}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.035;z-index:5;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.86' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.42'/%3E%3C/svg%3E")}
+a{color:inherit}
+button{font:inherit}
+.wrap{width:var(--page);margin:0 auto}
+.top{display:flex;align-items:center;justify-content:space-between;gap:24px;padding:26px 0;border-bottom:1px solid var(--line)}
+.brand{display:flex;align-items:center;gap:14px;text-decoration:none}
+.mark{width:45px;height:45px;display:grid;place-items:center;overflow:hidden;background:#f8f5ee;border:1px solid #ffffff28}
+.mark img{display:block;width:100%;height:100%;object-fit:contain}
+.brand-copy strong{display:block;font-size:13px;letter-spacing:.26em;font-weight:700}
+.brand-copy small{display:block;margin-top:3px;color:var(--muted);font-size:10px;letter-spacing:.035em}
+.top-actions{display:flex;align-items:center;justify-content:flex-end;gap:18px;flex-wrap:wrap}
+.portal-label{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.install,.local-link{display:inline-flex;align-items:center;justify-content:center;gap:12px;min-height:40px;padding:9px 13px;border:1px solid var(--line);background:transparent;color:var(--ink);text-decoration:none;font-size:11px;letter-spacing:.015em;cursor:pointer;transition:background .4s var(--ease),border-color .4s var(--ease),color .4s var(--ease)}
+.install{display:none}.install.ready{display:inline-flex}
+.install:hover,.local-link:hover{background:var(--accent);border-color:var(--accent);color:#20211d}
+.arrow{font-size:16px;line-height:1;transition:transform .4s var(--ease)}
+.local-link:hover .arrow{transform:translate(2px,-2px)}
+.hero{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(230px,.65fr);align-items:end;gap:54px;padding:clamp(76px,11vw,142px) 0 70px}
+.eyebrow{display:flex;align-items:center;gap:12px;color:var(--accent-light);font-size:10px;font-weight:700;letter-spacing:.2em;text-transform:uppercase}
+.eyebrow:before{content:"";width:28px;height:1px;background:var(--accent)}
+.hero h1{max-width:800px;margin:24px 0 22px;font-family:var(--serif);font-size:clamp(54px,8vw,104px);font-weight:500;line-height:.99;letter-spacing:-.055em}
+.hero h1 em{font-weight:500;color:var(--accent-light)}
+.hero-copy{max-width:350px;margin:0 0 8px 0;padding-left:22px;border-left:1px solid var(--line);color:var(--muted);font-size:13px;line-height:1.9}
+.hero-copy strong{display:block;color:var(--ink);font-weight:600;margin-bottom:8px}
+.section-head{display:flex;justify-content:space-between;align-items:baseline;gap:20px;padding:18px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.section-head h2{margin:0;font-size:10px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
+.section-head span{font-family:var(--serif);font-size:15px;color:var(--accent-light);font-style:italic}
+.business-grid{display:grid;grid-template-columns:1.12fr .88fr;gap:0 42px;padding:0 0 74px}
+.business{position:relative;display:flex;flex-direction:column;min-height:270px;padding:31px 0 26px;border-bottom:1px solid var(--line);transition:padding .45s var(--ease)}
+.business:first-child{grid-row:span 2;min-height:100%;padding-right:30px;border-right:1px solid var(--line)}
+.business:hover{padding-left:9px}
+.business:first-child:hover{padding-left:9px}
+.business-index{display:flex;justify-content:space-between;align-items:center;margin-bottom:32px;color:var(--accent);font-size:10px;letter-spacing:.16em}
+.business-index span:last-child{color:var(--muted);letter-spacing:.04em}
+.business h3{margin:0 0 12px;font-family:var(--serif);font-size:clamp(28px,3.1vw,40px);font-weight:500;letter-spacing:-.035em;line-height:1.15}
+.business:first-child h3{font-size:clamp(38px,5vw,61px)}
+.business p{max-width:440px;margin:0 0 26px;color:var(--muted);font-size:12px;line-height:1.9}
+.business-meta{margin-top:auto;margin-bottom:20px;color:var(--accent-light);font-size:9px;letter-spacing:.13em;text-transform:uppercase}
+.business-link{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-top:15px;border-top:1px solid #ffffff1a;text-decoration:none;font-size:11px;font-weight:600}
+.business-link .arrow{color:var(--accent-light)}
+.business-link:hover .arrow{transform:translate(3px,-3px)}
+.notice{display:grid;grid-template-columns:160px minmax(0,1fr);gap:28px;padding:25px 0 30px;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.notice-title{color:var(--accent-light);font-size:10px;letter-spacing:.16em;text-transform:uppercase}
+.notice p{max-width:830px;margin:0;color:var(--muted);font-size:11px;line-height:1.9}
+.notice strong{color:var(--ink);font-weight:600}
+.footer{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:26px 0 34px;color:#928e82;font-size:10px;letter-spacing:.06em}
+.footer-brand{color:var(--ink);letter-spacing:.2em;font-weight:700}
+.reveal{opacity:0;transform:translateY(14px);transition:opacity .65s var(--ease),transform .65s var(--ease)}
+.reveal.is-visible{opacity:1;transform:translateY(0)}
+@media(min-width:1500px){.hero{padding-top:160px;padding-bottom:85px}}
+@media(max-width:760px){
+ :root{--page:calc(100% - 40px)}
+ .top{align-items:flex-start;padding:18px 0;gap:12px}
+ .mark{width:39px;height:39px}
+ .brand{gap:10px}
+ .brand-copy strong{font-size:12px}
+ .top-actions{gap:8px}
+ .portal-label{display:none}
+ .local-link,.install{min-height:36px;padding:8px 10px;font-size:10px}
+ .hero{grid-template-columns:1fr;gap:22px;padding:74px 0 48px}
+ .hero h1{font-size:clamp(52px,13vw,78px);margin:20px 0}
+ .hero-copy{max-width:520px;margin-left:2px;padding-left:15px}
+ .business-grid{grid-template-columns:1fr;padding-bottom:46px}
+ .business,.business:first-child{grid-row:auto;min-height:0;padding:26px 0 23px;border-right:0}
+ .business:first-child h3{font-size:clamp(36px,10vw,52px)}
+ .business-index{margin-bottom:20px}
+ .business p{margin-bottom:22px}
+ .notice{grid-template-columns:1fr;gap:10px;padding:21px 0}
+ .footer{align-items:flex-start;flex-direction:column;gap:7px}
+}
+@media(max-width:390px){:root{--page:calc(100% - 30px)}.top{flex-wrap:wrap}.top-actions{width:100%;justify-content:space-between}.hero h1{font-size:49px}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{animation:none!important;transition-duration:.01ms!important}.reveal{opacity:1;transform:none}}
 </style>
-<style>
-:root{color-scheme:dark;--bg:#20211d;--panel:#292a24;--line:#49463c;--text:#f7f2e8;--muted:#b8b09f;--gold:#b59a68;--blue:#c8b58e;--green:#91aa92}
-body{background:radial-gradient(ellipse at 78% -12%,rgba(181,154,104,.15),transparent 44%),radial-gradient(ellipse at 0% 100%,rgba(110,128,103,.1),transparent 34%),var(--bg)}
-.top{border-bottom-color:#ffffff16}.pill{border-color:#49463c;color:#c6bdab}.install{border-color:#b59a68;background:#353329;color:#f7f2e8}
-.card{background:linear-gradient(145deg,#30312a,#252620);border-color:#49463c;box-shadow:0 12px 34px rgba(0,0,0,.12);transition:transform .28s cubic-bezier(.2,.75,.25,1),border-color .28s ease,background .28s ease,box-shadow .28s ease}
-.card:hover{transform:translateY(-5px);border-color:#b59a68;background:linear-gradient(145deg,#39382e,#282922);box-shadow:0 22px 50px rgba(0,0,0,.23)}
-.glyph{background:rgba(181,154,104,.1);border-color:rgba(181,154,104,.24);color:#d7c39a}.sh h2,.be h2,.hu h2{color:#d7c39a}
-.link{border-top-color:#ffffff18}.link span{color:#c9b58a}
-.notice{border-color:#b59a6840;background:#b59a6810}.notice b{color:#f7f2e8}
-.card,.notice{animation:hesedPortalIn .5s cubic-bezier(.2,.75,.25,1) both}.card:nth-child(2){animation-delay:.07s}.card:nth-child(3){animation-delay:.14s}
-@keyframes hesedPortalIn{from{opacity:.55;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
-@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important}}
-</style></head>
-<body><div class="wrap">
-<header class="top"><div class="brand"><div class="mark"><img src="https://raw.githubusercontent.com/erickramonsanchez8-maker/assosiated/main/logo%20hesed.jpg" alt="Logotipo de HESED"></div><div><strong>HESED</strong><small>Centro de operaciones</small></div></div><div class="top-actions"><button class="install" id="installApp" type="button">Instalar HESED</button><a class="pill" style="color:var(--text);text-decoration:none" href="../HESED_LOCAL.html">Abrir acceso local ↗</a><div class="pill">PORTAL DE ACCESO · HESED</div></div></header>
-<main><section class="hero"><div class="eyebrow">Una visión · Tres operaciones</div><h1>Bienvenido a<br>HESED.</h1><p>Un punto de entrada para administrar y dar seguimiento a las operaciones de Shalom, Befit y La Huerta. Cada área conserva su propósito y sus herramientas especializadas.</p></section>
-<section class="grid" aria-label="Áreas de negocio">
-<article class="card sh"><div class="glyph">✳</div><h2>SHALOM</h2><p>Gestión de campañas, inversión, gastos, sucursales, objetivos y reportes de rendimiento a través del panel de gestión existente. La web comercial y la tienda siguen siendo independientes.</p><div class="meta">Restaurante · Marketing y rendimiento</div><a class="link" href="../HESED_LOCAL.html">Entrar mediante HESED <span>↗</span></a></article>
-<article class="card be"><div class="glyph">⌁</div><h2>BEFIT</h2><p>Módulo inicial local para registrar socios, gastos, campañas y objetivos del gimnasio, con exportación CSV y respaldo JSON. Todavía no incluye sincronización entre dispositivos ni control de acceso central.</p><div class="meta">Gimnasios · Gestión operativa</div><a class="link" href="../HESED_LOCAL.html">Entrar mediante HESED <span>↗</span></a></article>
-<article class="card hu"><div class="glyph">⌘</div><h2>LA HUERTA</h2><p>Acceso a Mi Parcela de AGROVA para continuar con las herramientas agrícolas existentes, sin sustituir su flujo de trabajo.</p><div class="meta">Agricultura · AGROVA / Mi Parcela</div><a class="link" href="../HESED_LOCAL.html">Entrar mediante HESED <span>↗</span></a></article>
-</section>
-<section class="notice"><span>ⓘ</span><div><b>Estado de implementación.</b> Usa el acceso central de HESED para iniciar sesión como propietario; después cada unidad solicita credenciales propias. Los enlaces de este directorio conducen al acceso central y no abren directamente las herramientas de cada empresa. Este prototipo guarda credenciales y datos en el navegador; todavía no cuenta con autenticación segura de servidor, control de permisos remoto ni sincronización entre dispositivos. <b>No captures información sensible ni lo uses en producción</b> hasta completar autenticación de servidor, permisos, respaldos verificados y sincronización central.</div></section>
-</main><footer><span>HESED · Operación con propósito</span><span>SHALOM · BEFIT · LA HUERTA</span></footer></div><script>
-(()=>{let installPrompt=null;const installButton=document.getElementById("installApp");window.addEventListener("beforeinstallprompt",event=>{event.preventDefault();installPrompt=event;installButton.classList.add("ready")});installButton.addEventListener("click",async()=>{if(!installPrompt){alert("Para instalar HESED, abre el menú del navegador y elige «Instalar aplicación» o «Agregar a pantalla de inicio».");return}installPrompt.prompt();await installPrompt.userChoice;installPrompt=null;installButton.classList.remove("ready")});window.addEventListener("appinstalled",()=>{installButton.classList.remove("ready");installButton.textContent="HESED instalada"});if("serviceWorker" in navigator && location.protocol==="https:"){navigator.serviceWorker.register("./hesed-sw.js").catch(()=>{});}})();
-</script></body></html>
+</head>
+<body>
+<div class="wrap">
+<header class="top">
+ <a class="brand" href="./hesed.html" aria-label="HESED, inicio">
+  <span class="mark"><img src="https://raw.githubusercontent.com/erickramonsanchez8-maker/assosiated/main/logo%20hesed.jpg" alt="Logotipo de HESED"></span>
+  <span class="brand-copy"><strong>HESED</strong><small>Centro de operaciones</small></span>
+ </a>
+ <div class="top-actions">
+  <span class="portal-label">Acceso privado · Tres empresas</span>
+  <button class="install" id="installApp" type="button">Instalar HESED <span class="arrow" aria-hidden="true">↗</span></button>
+  <a class="local-link" href="../HESED_LOCAL.html">Abrir sistema <span class="arrow" aria-hidden="true">↗</span></a>
+ </div>
+</header>
+<main>
+ <section class="hero reveal">
+  <div>
+   <div class="eyebrow">Una dirección · Tres operaciones</div>
+   <h1>Todo en orden.<br><em>Cada negocio</em><br>en su lugar.</h1>
+  </div>
+  <p class="hero-copy"><strong>Bienvenido a HESED.</strong>Un solo punto de acceso para dar seguimiento a SHALOM, BEFIT y LA HUERTA, respetando el ritmo y las necesidades de cada empresa.</p>
+ </section>
+ <div class="section-head reveal"><h2>Unidades de negocio</h2><span>Una visión compartida</span></div>
+ <section class="business-grid" aria-label="Áreas de negocio">
+  <article class="business reveal">
+   <div class="business-index"><span>01 / SHALOM</span><span>Restaurante</span></div>
+   <h3>Una operación<br>con sabor propio.</h3>
+   <p>Seguimiento de campañas, inversión, gastos, sucursales, objetivos y reportes de rendimiento desde el panel de gestión. La web comercial y la tienda continúan por separado.</p>
+   <div class="business-meta">Marketing · Gastos · Rendimiento</div>
+   <a class="business-link" href="../HESED_LOCAL.html">Entrar a través de HESED <span class="arrow" aria-hidden="true">↗</span></a>
+  </article>
+  <article class="business reveal">
+   <div class="business-index"><span>02 / BEFIT</span><span>Bienestar y fitness</span></div>
+   <h3>El pulso del gimnasio.</h3>
+   <p>Socios, asistencia, pagos, gastos, campañas y objetivos, con exportación de datos y respaldo local. La sincronización entre dispositivos está pendiente.</p>
+   <div class="business-meta">Socios · Operación · Seguimiento</div>
+   <a class="business-link" href="../HESED_LOCAL.html">Entrar a través de HESED <span class="arrow" aria-hidden="true">↗</span></a>
+  </article>
+  <article class="business reveal">
+   <div class="business-index"><span>03 / LA HUERTA</span><span>Agricultura</span></div>
+   <h3>El trabajo de cada parcela.</h3>
+   <p>Acceso a Mi Parcela de AGROVA para continuar con las herramientas agrícolas existentes, sin sustituir su flujo de trabajo.</p>
+   <div class="business-meta">Campo · Parcelas · Registro</div>
+   <a class="business-link" href="../HESED_LOCAL.html">Entrar a través de HESED <span class="arrow" aria-hidden="true">↗</span></a>
+  </article>
+ </section>
+ <section class="notice reveal" aria-label="Estado de implementación">
+  <div class="notice-title">Antes de comenzar</div>
+  <p><strong>Estado del sistema.</strong> Entra con la cuenta de propietario y después accede a la unidad correspondiente. Los enlaces de este directorio conducen al acceso central; no abren directamente los módulos. Esta versión es un prototipo local: las credenciales y los datos se guardan en el navegador y aún no hay autenticación segura de servidor, permisos remotos ni sincronización entre dispositivos. <strong>No introduzcas información sensible ni lo uses en producción</strong> hasta completar autenticación, permisos, respaldos verificados y sincronización central.</p>
+ </section>
+</main>
+<footer class="footer"><span class="footer-brand">HESED</span><span>Operación con propósito</span><span>SHALOM · BEFIT · LA HUERTA</span></footer>
+</div>
+<script>
+(()=> {
+ let installPrompt=null;
+ const installButton=document.getElementById("installApp");
+ window.addEventListener("beforeinstallprompt",event=>{
+  event.preventDefault();installPrompt=event;installButton.classList.add("ready");
+ });
+ installButton.addEventListener("click",async()=>{
+  if(!installPrompt){
+   alert("Para instalar HESED, abre el menú del navegador y elige «Instalar aplicación» o «Agregar a pantalla de inicio».");
+   return;
+  }
+  installPrompt.prompt();
+  await installPrompt.userChoice;
+  installPrompt=null;
+  installButton.classList.remove("ready");
+ });
+ window.addEventListener("appinstalled",()=>{
+  installButton.classList.remove("ready");
+  installButton.innerHTML='HESED instalada';
+ });
+ if("serviceWorker" in navigator && location.protocol==="https:"){
+  navigator.serviceWorker.register("./hesed-sw.js").catch(()=>{});
+ }
+ const items=document.querySelectorAll(".reveal");
+ if("IntersectionObserver" in window && !window.matchMedia("(prefers-reduced-motion: reduce)").matches){
+  const observer=new IntersectionObserver(entries=>{
+   entries.forEach(entry=>{
+    if(entry.isIntersecting){entry.target.classList.add("is-visible");observer.unobserve(entry.target);}
+   });
+  },{threshold:.12,rootMargin:"0px 0px -24px 0px"});
+  items.forEach(item=>observer.observe(item));
+ }else{items.forEach(item=>item.classList.add("is-visible"));}
+})();
+</script>
+</body>
+</html>
