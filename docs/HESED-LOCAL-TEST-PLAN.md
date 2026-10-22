@@ -70,3 +70,18 @@ Validar primero la experiencia local de HESED antes de conectar Supabase. Esta l
 ## Siguiente etapa después de aprobar las pruebas locales
 
 Conectar Supabase Auth y las tablas protegidas por RLS; invitar únicamente a los dos propietarios; conectar cada módulo al identificador de negocio correcto; después probar sincronización entre dos dispositivos y recuperación tras una desconexión. No migrar datos reales sin exportar y verificar primero un respaldo.
+
+
+## Accesos e identidad visual (LOC-23 a LOC-29)
+
+| ID | Prueba | Resultado esperado |
+|---|---|---|
+| LOC-23 | Abrir HESED sin cuentas guardadas | Solicita crear el primer acceso del propietario; no abre directamente una unidad. |
+| LOC-24 | Cerrar sesión de HESED e iniciar con usuario/contraseña incorrectos | Rechaza el acceso y no muestra el selector de empresas. |
+| LOC-25 | Desde HESED, abrir SHALOM | Solicita credenciales propias de SHALOM antes de mostrar el panel. |
+| LOC-26 | Desde HESED, abrir BEFIT | Solicita credenciales propias de BEFIT; la interfaz conserva su identidad verde/mint. |
+| LOC-27 | Desde HESED, abrir LA HUERTA | Solicita credenciales propias de LA HUERTA y conserva el flujo AGROVA / Mi Parcela. |
+| LOC-28 | Agregar el segundo propietario en HESED y en cada unidad | El segundo propietario puede entrar con sus credenciales individuales; cada unidad conserva sus propias cuentas. |
+| LOC-29 | Abrir BEFIT directamente sin sesión temporal válida | Muestra su pantalla de acceso; no deja visible el módulo hasta validar credenciales. |
+
+**Nota de seguridad:** estas puertas de acceso son un prototipo local. El almacenamiento del navegador y los hashes en el cliente no reemplazan autenticación de servidor, sesiones seguras ni permisos de base de datos. No tratar como control de acceso de producción.
