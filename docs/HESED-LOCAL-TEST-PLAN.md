@@ -97,7 +97,7 @@ Conectar Supabase Auth y las tablas protegidas por RLS; invitar únicamente a lo
 | LOC-34 | Abrir Inicio y Mis campos | No aparece el motor, el lienzo ni la visualización 3D de parcelas; los datos y la gestión de parcelas siguen disponibles. |
 | LOC-35 | Registrar un dato ficticio en Mi Parcela, cambiar de módulo y volver | El registro persiste y no aparece en SHALOM ni BEFIT. Confirmar también al cerrar y volver a abrir la aplicación. |
 
-**Nota de integración:** el código de Mi Parcela se incorpora dentro de `HESED_LOCAL.html` para que el usuario pueda probarlo como una sola página. La visualización 3D de parcelas se excluye únicamente de esta versión integrada; el archivo independiente `docs/hesed-huerta.html` se conserva como fuente original. La integración y los flujos requieren pruebas manuales en Edge/Chrome antes de usar información real.
+**Nota de integración:** el código de Mi Parcela se incorpora dentro de `HESED_LOCAL.html` para que el usuario pueda probarlo como una sola página. La visualización 3D de parcelas se excluye únicamente de esta versión integrada; la fuente original con vista 3D se conserva fuera de las rutas activas en `archive/mi-parcela-original-3d.html`. La integración y los flujos requieren pruebas manuales en Edge/Chrome antes de usar información real.
 
 ## LOC-36 a LOC-40 · Marca HESED y navegación integrada
 
