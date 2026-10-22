@@ -31,6 +31,8 @@ Validar primero la experiencia local de HESED antes de conectar Supabase. Esta l
 | LOC-04 | Crear campaña de prueba en SHALOM | La campaña se guarda y aparece después de navegar a otra sección y regresar. |
 | LOC-05 | Cambiar a BEFIT y a LA HUERTA | El cambio de empresa funciona y no muestra por defecto registros de prueba de SHALOM. |
 | LOC-06 | Crear un registro de prueba en cada área que lo permita | Los registros de cada área permanecen separados. Anotar las funciones que aún sean solo un marcador o prototipo. |
+| LOC-06A | Registrar asistencia en BEFIT para un socio de prueba | La asistencia queda asociada al socio correcto y persiste al cambiar de pestaña y regresar. |
+| LOC-06B | Registrar un pago en BEFIT | El pago conserva socio, concepto, fecha, método e importe; se exporta correctamente a CSV y respaldo JSON. |
 | LOC-07 | Cerrar y volver a abrir el archivo en el mismo navegador | Los datos locales continúan disponibles en ese mismo perfil de navegador. |
 | LOC-08 | Exportar respaldo, limpiar solo los datos de prueba y reimportar | El respaldo recupera los datos esperados sin duplicarlos ni mezclar empresas. |
 | LOC-09 | Registrar un gasto con comprobante ficticio en SHALOM | El movimiento aparece en la lista y el comprobante abre en el mismo dispositivo. |
