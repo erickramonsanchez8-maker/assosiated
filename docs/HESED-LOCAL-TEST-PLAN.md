@@ -44,6 +44,7 @@ Validar primero la experiencia local de HESED antes de conectar Supabase. Esta l
 | LOC-15 | Revisar sintaxis de scripts en los cinco HTML principales | Los scripts de HESED_LOCAL, portal, SHALOM, BEFIT y Mi Parcela se pueden analizar sin errores de sintaxis antes de las pruebas manuales. |
 | LOC-16 | Exportar CSV de BEFIT con texto que comience por `=`, `+`, `-` o `@` | El CSV neutraliza esas celdas para reducir el riesgo de que Excel/hojas de cálculo las interpreten como fórmulas. |
 | LOC-17 | Eliminar un socio con asistencias o pagos vinculados | El sistema pide confirmación y elimina también los registros dependientes para no dejar referencias huérfanas. |
+| LOC-18 | Abrir BEFIT desde HESED_LOCAL y volver con el enlace superior | El retorno conduce a HESED_LOCAL; si BEFIT se abre desde el directorio de `docs/`, el retorno conduce a ese directorio. |
 
 ## Límites que deben permanecer visibles
 
