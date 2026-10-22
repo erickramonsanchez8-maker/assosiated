@@ -8,8 +8,8 @@
   "scope": "./",
   "display": "standalone",
   "orientation": "any",
-  "background_color": "#0b1420",
-  "theme_color": "#142b45",
+  "background_color": "#20211d",
+  "theme_color": "#20211d",
   "icons": [
     {
       "src": "./hesed-icon.svg",
