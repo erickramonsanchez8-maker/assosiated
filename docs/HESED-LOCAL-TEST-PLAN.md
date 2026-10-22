@@ -37,6 +37,9 @@ Validar primero la experiencia local de HESED antes de conectar Supabase. Esta l
 | LOC-10 | Revisar datos de ejemplo | Los datos DEMO están identificados claramente y no se confunden con información real. |
 | LOC-11 | Probar ancho móvil y escritorio | No hay controles cortados ni tablas inutilizables; se puede navegar con teclado y ratón. |
 | LOC-12 | Revisar consola del navegador | No aparecen errores que impidan guardar, navegar, exportar o importar. |
+| LOC-13 | Descargar y restaurar un respaldo JSON de BEFIT | Se recuperan socios, gastos, campañas y objetivos tras confirmar el reemplazo; el módulo valida el formato antes de restaurar. |
+| LOC-14 | Restaurar un respaldo BEFIT anterior | Se acepta el formato anterior generado por este módulo, siempre que tenga las cuatro colecciones esperadas; no se importan respaldos identificados como otra empresa. |
+| LOC-15 | Revisar sintaxis de scripts en los cinco HTML principales | Los scripts de HESED_LOCAL, portal, SHALOM, BEFIT y Mi Parcela se pueden analizar sin errores de sintaxis antes de las pruebas manuales. |
 
 ## Límites que deben permanecer visibles
 
