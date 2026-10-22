@@ -99,3 +99,15 @@ Conectar Supabase Auth y las tablas protegidas por RLS; invitar únicamente a lo
 
 **Nota de integración:** el código de Mi Parcela se incorpora dentro de `HESED_LOCAL.html` para que el usuario pueda probarlo como una sola página. La visualización 3D de parcelas se excluye únicamente de esta versión integrada; el archivo independiente `docs/hesed-huerta.html` se conserva como fuente original. La integración y los flujos requieren pruebas manuales en Edge/Chrome antes de usar información real.
 
+## LOC-36 a LOC-40 · Marca HESED y navegación integrada
+
+| ID | Prueba | Resultado esperado |
+|---|---|---|
+| LOC-36 | Abrir el selector principal | Se muestra la identidad HESED sin encabezados o controles del módulo de SHALOM detrás. |
+| LOC-37 | Entrar a LA HUERTA | El encabezado heredado del módulo SHALOM desaparece y Mi Parcela ocupa el ancho disponible dentro de HESED. |
+| LOC-38 | Esperar a que cargue Mi Parcela | Se muestra un estado de carga temporal y luego aparece la aplicación agrícola; si falta el código integrado, se muestra un mensaje de error y una salida segura. |
+| LOC-39 | Cambiar de LA HUERTA al selector y volver a SHALOM | El encabezado y las pestañas de SHALOM se restauran; no quedan barras duplicadas ni se conserva el encabezado de la empresa anterior. |
+| LOC-40 | Revisar títulos, encabezados, reportes y exportaciones visibles | La marca visible es HESED o la identidad de la empresa correspondiente; no aparece la marca anterior. |
+
+**Alcance de verificación:** se validó la sintaxis de los scripts y la presencia de los módulos agrícolas. Estas comprobaciones no sustituyen una prueba manual en el navegador.
+
