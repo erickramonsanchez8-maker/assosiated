@@ -1260,7 +1260,7 @@ async function divisionHash(password,salt){const bytes=await crypto.subtle.diges
 function openHesedCompany(company){
  const meta=DIVISION_META[company];if(!meta)return;
  // LA HUERTA ya tiene autenticación propia dentro de Mi Parcela; no duplicar la pantalla de acceso.
- if(company==='LA_HUERTA'){openHesedCompanyUnlocked(company);return;}
+ if(company==='LA_HUERTA'||company==='BEFIT'){openHesedCompanyUnlocked(company);return;}
  const accounts=divisionUsers(company),first=!Object.keys(accounts).length;
  document.getElementById('hesed-home')?.remove();document.getElementById('hesed-company-bar')?.remove();
  document.body.classList.add('noauth');document.body.classList.remove('onboarding-mode');
