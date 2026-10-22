@@ -1,4 +1,4 @@
-const CACHE_NAME = 'hesed-shell-v1';
+const CACHE_NAME = 'hesed-shell-v2';
 const SHELL = ['./hesed.html', './hesed.webmanifest', './hesed-icon.svg'];
 self.addEventListener('install', event => {
   event.waitUntil(caches.open(CACHE_NAME).then(cache => cache.addAll(SHELL)).then(() => self.skipWaiting()));
