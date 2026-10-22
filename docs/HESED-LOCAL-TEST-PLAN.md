@@ -85,3 +85,17 @@ Conectar Supabase Auth y las tablas protegidas por RLS; invitar únicamente a lo
 | LOC-29 | Abrir BEFIT directamente sin sesión temporal válida | Muestra su pantalla de acceso; no deja visible el módulo hasta validar credenciales. |
 
 **Nota de seguridad:** estas puertas de acceso son un prototipo local. El almacenamiento del navegador y los hashes en el cliente no reemplazan autenticación de servidor, sesiones seguras ni permisos de base de datos. No tratar como control de acceso de producción.
+
+## LOC-30 a LOC-35 · Identidad premium e integración de Mi Parcela
+
+| ID | Prueba | Resultado esperado |
+|---|---|---|
+| LOC-30 | Abrir HESED y recorrer Inicio, acceso y administración | Paleta carbón, marfil y champán consistente; controles legibles y contraste suficiente. |
+| LOC-31 | Pasar el cursor por tarjetas, botones y navegación | Transiciones discretas, sin saltos de contenido ni animaciones que bloqueen la interacción. |
+| LOC-32 | Entrar a LA HUERTA desde HESED | Mi Parcela se abre dentro de la misma página, sin navegar a `docs/hesed-huerta.html`. |
+| LOC-33 | Revisar los módulos agrícolas integrados | Parcelas, siembras, producción, inventario, finanzas, recordatorios y administración siguen accesibles. |
+| LOC-34 | Abrir Inicio y Mis campos | No aparece el motor, el lienzo ni la visualización 3D de parcelas; los datos y la gestión de parcelas siguen disponibles. |
+| LOC-35 | Registrar un dato ficticio en Mi Parcela, cambiar de módulo y volver | El registro persiste y no aparece en SHALOM ni BEFIT. Confirmar también al cerrar y volver a abrir la aplicación. |
+
+**Nota de integración:** el código de Mi Parcela se incorpora dentro de `HESED_LOCAL.html` para que el usuario pueda probarlo como una sola página. La visualización 3D de parcelas se excluye únicamente de esta versión integrada; el archivo independiente `docs/hesed-huerta.html` se conserva como fuente original. La integración y los flujos requieren pruebas manuales en Edge/Chrome antes de usar información real.
+
