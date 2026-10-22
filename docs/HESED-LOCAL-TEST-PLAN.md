@@ -80,7 +80,7 @@ Conectar Supabase Auth y las tablas protegidas por RLS; invitar únicamente a lo
 | LOC-24 | Cerrar sesión de HESED e iniciar con usuario/contraseña incorrectos | Rechaza el acceso y no muestra el selector de empresas. |
 | LOC-25 | Desde HESED, abrir SHALOM | Solicita credenciales propias de SHALOM antes de mostrar el panel. |
 | LOC-26 | Desde HESED, abrir BEFIT | Solicita credenciales propias de BEFIT; la interfaz conserva su identidad verde/mint. |
-| LOC-27 | Desde HESED, abrir LA HUERTA | Solicita credenciales propias de LA HUERTA y conserva el flujo AGROVA / Mi Parcela. |
+| LOC-27 | Desde HESED, abrir LA HUERTA | Abre el módulo existente de Mi Parcela, que solicita su propio acceso; no presenta una segunda pantalla genérica de HESED y conserva el flujo agrícola. |
 | LOC-28 | Agregar el segundo propietario en HESED y en cada unidad | El segundo propietario puede entrar con sus credenciales individuales; cada unidad conserva sus propias cuentas. |
 | LOC-29 | Abrir BEFIT directamente sin sesión temporal válida | Muestra su pantalla de acceso; no deja visible el módulo hasta validar credenciales. |
 
