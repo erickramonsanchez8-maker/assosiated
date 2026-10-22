@@ -6,7 +6,7 @@ Validar primero la experiencia local de HESED antes de conectar Supabase. Esta l
 
 ## Alcance de esta iteración
 
-- Mantener ASSOSIATED 163 como módulo operativo de SHALOM.
+- Mantener módulo administrativo de SHALOM como módulo operativo de SHALOM.
 - Entrar desde una bienvenida común de HESED y seleccionar SHALOM, BEFIT o LA HUERTA.
 - Conservar datos locales separados por empresa.
 - No modificar ni reemplazar el producto agrícola AGROVA / Mi Parcela.
@@ -27,7 +27,7 @@ Validar primero la experiencia local de HESED antes de conectar Supabase. Esta l
 | --- | --- | --- |
 | LOC-01 | Abrir el HTML | La pantalla carga sin errores visibles y la navegación responde. |
 | LOC-02 | Abrir la bienvenida de HESED | Se muestran SHALOM, BEFIT y LA HUERTA y se puede volver al selector. |
-| LOC-03 | Entrar en SHALOM | Se abre el panel basado en ASSOSIATED 163 y las funciones conservadas siguen accesibles. |
+| LOC-03 | Entrar en SHALOM | Se abre el panel basado en módulo administrativo de SHALOM y las funciones conservadas siguen accesibles. |
 | LOC-04 | Crear campaña de prueba en SHALOM | La campaña se guarda y aparece después de navegar a otra sección y regresar. |
 | LOC-05 | Cambiar a BEFIT y a LA HUERTA | El cambio de empresa funciona y no muestra por defecto registros de prueba de SHALOM. |
 | LOC-06 | Crear un registro de prueba en cada área que lo permita | Los registros de cada área permanecen separados. Anotar las funciones que aún sean solo un marcador o prototipo. |
@@ -63,7 +63,7 @@ Validar primero la experiencia local de HESED antes de conectar Supabase. Esta l
 
 1. Cualquier pérdida de datos al navegar o reabrir el archivo.
 2. Cualquier mezcla visible de registros entre empresas.
-3. Una función preexistente de ASSOSIATED 163 que haya dejado de operar.
+3. Una función preexistente de módulo administrativo de SHALOM que haya dejado de operar.
 4. Un comprobante que se marque como guardado pero no pueda recuperarse.
 5. Errores de consola que impidan una operación crítica.
 
