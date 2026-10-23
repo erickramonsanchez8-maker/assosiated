@@ -111,7 +111,7 @@ function renderLoyalty(){
   const emailOK=!!(m.consent&&m.email);
   const phone=String(m.phone||'').replace(/\D/g,'');
   const phoneOK=!!(m.consent&&phone);
-  const mail='mailto:'+encodeURIComponent(m.email||'')+'?subject='+encodeURIComponent(subject)+'&body='+encodeURIComponent(message);
+  const mail='mailto:'+encodeURI(m.email||'')+'?subject='+encodeURIComponent(subject)+'&body='+encodeURIComponent(message);
   const wa='https://wa.me/'+phone+'?text='+encodeURIComponent(message);
   const last=m.hasVisits?m.lastVisit:'Sin asistencia registrada';
   return '<article class="loyalty-card"><div class="loyalty-card-head"><div><strong>'+esc(m.name)+'</strong><div class="muted">'+esc(m.plan||'Sin plan')+' · Última actividad: '+esc(last)+'</div><div style="margin-top:6px"><span class="loyalty-pill">'+m.idleDays+' días sin asistir</span> <span class="loyalty-pill">'+(m.consent?'Contacto autorizado':'Sin autorización')+'</span></div></div><div class="muted">'+esc(m.status||'Sin estado')+'</div></div><div class="loyalty-actions">'+(emailOK?'<a class="btn" href="'+mail+'">Preparar correo</a>':'<button class="btn" type="button" disabled title="Registra correo y autorización en Socios">Correo no disponible</button>')+(phoneOK?'<a class="btn secondary" target="_blank" rel="noopener noreferrer" href="'+wa+'">Preparar WhatsApp</a>':'<button class="btn secondary" type="button" disabled title="Registra teléfono y autorización en Socios">WhatsApp no disponible</button>')+'<button class="btn secondary" type="button" data-loyalty-log="'+esc(m.id)+'">Registrar seguimiento</button></div></article>';
