@@ -1366,7 +1366,7 @@ function openHesedCompanyUnlocked(company){
    catch(error){main.innerHTML='<section class="hesed-module-error"><h2>No se pudo abrir BEFIT</h2><p>Recarga HESED e inténtalo de nuevo. No se han eliminado registros.</p><button class="btn" onclick="showHesedHome()">Volver a HESED</button></section>';console.error('Error al iniciar BEFIT integrado',error);}
   }
   const bar=document.createElement('div');bar.id='hesed-company-bar';bar.style.cssText='position:sticky;top:0;z-index:1000;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 18px;background:#F8F9FA;color:#14213D;border-bottom:2px solid '+divisionMeta.accent+';font:600 12px Manrope,Arial,sans-serif';
-  bar.innerHTML='<span style="letter-spacing:.04em">HESED <span style="color:'+divisionMeta.accent+'">/</span> '+divisionMeta.name+' <small style="opacity:.7">· ESPACIO ADMINISTRATIVO</small></span><span style="display:flex;gap:8px;align-items:center;flex-wrap:wrap"><button style="border:1px solid #b59a68;background:transparent;color:white;border-radius:9px;padding:7px 11px;cursor:pointer" onclick="showHesedHome()">Cambiar empresa</button></span>';
+  bar.innerHTML='<span style="letter-spacing:.04em">HESED <span style="color:'+divisionMeta.accent+'">/</span> '+divisionMeta.name+' <small style="opacity:.7">· ESPACIO ADMINISTRATIVO</small></span><span style="display:flex;gap:8px;align-items:center;flex-wrap:wrap"><button style="border:1px solid #CBD5E1;background:#FFFFFF;color:#14213D;border-radius:9px;padding:7px 11px;cursor:pointer" onclick="showHesedHome()">Cambiar empresa</button></span>';
   document.body.insertBefore(bar,document.body.firstChild);scrollTo(0,0);return;
  }
  document.body.classList.remove('hesed-module-active');
@@ -1374,7 +1374,7 @@ function openHesedCompanyUnlocked(company){
  KEY='a136:data:'+HESED_EMAIL;load();R={v:'c'};render();
  const bar=document.createElement('div');bar.id='hesed-company-bar';bar.style.cssText='position:sticky;top:0;z-index:1000;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:9px 16px;background:#F8F9FA;color:#14213D;border-bottom:2px solid #b59a68;font:600 12px Manrope,Arial,sans-serif';
  const accent=(DIVISION_META[company]||DIVISION_META.SHALOM).accent;
- bar.innerHTML='<span>HESED <span style="color:'+accent+'">/</span> SHALOM <small style="opacity:.7">· ESPACIO ADMINISTRATIVO</small></span><span style="display:flex;gap:8px;align-items:center;flex-wrap:wrap"><button style="border:1px solid #b59a68;background:transparent;color:white;border-radius:9px;padding:7px 11px;cursor:pointer" onclick="manageDivisionUsers()">Agregar usuario</button><button style="border:1px solid #b59a68;background:transparent;color:white;border-radius:9px;padding:7px 11px;cursor:pointer" onclick="showHesedHome()">Cambiar empresa</button></span>';
+ bar.innerHTML='<span>HESED <span style="color:'+accent+'">/</span> SHALOM <small style="opacity:.7">· ESPACIO ADMINISTRATIVO</small></span><span style="display:flex;gap:8px;align-items:center;flex-wrap:wrap"><button style="border:1px solid #CBD5E1;background:#FFFFFF;color:#14213D;border-radius:9px;padding:7px 11px;cursor:pointer" onclick="manageDivisionUsers()">Agregar usuario</button><button style="border:1px solid #CBD5E1;background:#FFFFFF;color:#14213D;border-radius:9px;padding:7px 11px;cursor:pointer" onclick="showHesedHome()">Cambiar empresa</button></span>';
  document.body.insertBefore(bar,document.body.firstChild);scrollTo(0,0);
 }
 
