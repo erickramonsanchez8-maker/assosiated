@@ -50,6 +50,19 @@ Validar primero la experiencia local de HESED antes de conectar Supabase. Esta l
 | LOC-21 | Guardar, exportar y restaurar cortes de caja | El historial de cortes persiste, se exporta a CSV y se conserva al restaurar un respaldo BEFIT nuevo. Los respaldos anteriores abren con historial vacío. |
 | LOC-22 | Revisar datos antiguos sin método/sucursal | Los registros históricos incompletos no deben contarse como efectivo ni asignarse automáticamente a una sucursal; se revisan antes del corte. |
 
+## Fidelización BEFIT (LOC-30 a LOC-35)
+
+| ID | Prueba | Resultado esperado |
+| --- | --- | --- |
+| LOC-30 | Registrar un socio ficticio con correo, teléfono y autorización de contacto | Los datos se guardan en BEFIT; la autorización queda desmarcada por defecto y puede revisarse en el registro de socios. |
+| LOC-31 | Abrir Fidelización y cambiar el umbral de inactividad | Se muestran los socios cuya última asistencia (o fecha de alta si aún no hay asistencias registradas) supera el umbral; no se inventan datos de actividad. |
+| LOC-32 | Socio sin autorización o sin correo/teléfono | Los canales de contacto correspondientes permanecen deshabilitados. |
+| LOC-33 | Preparar correo o WhatsApp para un socio autorizado | Se abre el cliente correspondiente con el mensaje personalizado; el módulo no afirma que el mensaje ya se envió. |
+| LOC-34 | Registrar un seguimiento manual y reabrir la pestaña | El seguimiento aparece en el historial y persiste en el almacenamiento local. |
+| LOC-35 | Exportar e importar un respaldo BEFIT con seguimientos | La restauración conserva el historial de fidelización; los respaldos anteriores sin esa colección se restauran con historial vacío. |
+
+**Alcance del envío:** esta iteración prepara mensajes mediante el correo/WhatsApp del dispositivo y registra seguimientos confirmados manualmente. No envía campañas en segundo plano ni sustituye una integración con un proveedor de correo o WhatsApp Business. Para automatizar envíos habrá que configurar un proveedor, consentimiento y mecanismos de baja.
+
 ## Límites que deben permanecer visibles
 
 - El almacenamiento local pertenece al navegador/perfil y dispositivo donde se capturan los datos; no se sincroniza entre equipos.
