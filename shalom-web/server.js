@@ -129,7 +129,8 @@ app.patch("/api/admin/reservations/:id/status", adminOnly, async (req, res) => {
   try { const [r] = await dbReady().execute("UPDATE reservations SET status=? WHERE id=?", [status, Number(req.params.id)]); if (!r.affectedRows) return res.status(404).json({ error: "Reservación no encontrada." }); res.json({ ok: true }); }
   catch (_e) { res.status(503).json({ error: "No se pudo actualizar la reservación." }); }
 });
-app.use(express.static(path.join(__dirname)));
+app.use(["/server.js", "/database.sql", "/package.json", "/.env.example", "/HOSTINGER-INSTALACION.md"], (_req, res) => res.sendStatus(404));
+app.use(express.static(path.join(__dirname), { dotfiles: "deny", index: "index.html" }));
 app.use((err, _req, res, _next) => { console.error(err.message); res.status(400).json({ error: "Solicitud no válida." }); });
 const port = Number(process.env.PORT || 3000);
 app.listen(port, "0.0.0.0", () => console.log("SHALOM escuchando en puerto " + port));
