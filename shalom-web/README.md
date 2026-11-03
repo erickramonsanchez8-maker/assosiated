@@ -1,27 +1,24 @@
 # Shalom — Sabor y Paz
 
-Sitio web independiente de **Shalom — Sabor y Paz, Brunch & Dinner**, separado del panel interno ASSOCIATED y del portal de operaciones HESED.
+Sitio web público de SHALOM con catálogo, solicitudes de pedidos, reservaciones y panel privado del personal. Este proyecto no incluye el panel HESED.
 
 ## Archivos
 - `index.html`: sitio comercial principal.
-- `shalom-tienda.html`: catálogo y formulario de solicitud de pedido.
+- `shalom-tienda.html`: catálogo, carrito, envío de pedidos y formulario de reservaciones.
+- `server.js`: servidor que guarda pedidos y reservaciones.
+- `database.sql`: tablas para la base de datos.
+- `admin.html`: panel privado para revisar registros y cambiar estados.
+- `HOSTINGER-INSTALACION.md`: guía de despliegue.
 
-## Estado actual
-- Identidad visual cálida con Playfair Display + Montserrat.
-- Página principal y tienda enlazadas entre sí.
-- El logotipo nuevo se referencia temporalmente desde el repositorio fuente de ASSOCIATED. Al crear el repositorio dedicado, copia el archivo del logo y actualiza su ruta para que no dependa del repositorio fuente.
-- Los datos oficiales de contacto y la carta/precios siguen pendientes de confirmación. La tienda no es una pasarela de pago ni un sistema de pedidos confirmado.
+## Importante
+La web original tiene un catálogo de ejemplo y precios no confirmados. Antes de aceptar pedidos reales, SHALOM debe aprobar productos, precios, fotos, horarios y datos de contacto. Las reservaciones se guardan como solicitudes pendientes: esta primera versión no calcula aforo ni bloquea automáticamente horarios duplicados, por lo que el personal debe confirmar disponibilidad manualmente.
 
-## Publicación con GitHub Pages
-1. Crea un repositorio independiente llamado `shalom-web`.
-2. Copia el contenido de esta carpeta a la raíz del nuevo repositorio (debe quedar `index.html` en la raíz).
-3. Copia el archivo del logotipo de Shalom y actualiza su ruta en ambas páginas.
-4. En **Settings → Pages**, selecciona **Deploy from a branch**, rama `main`, carpeta `/ (root)`.
-5. Guarda y espera a que GitHub publique el sitio.
+## Despliegue
+Consulta `HOSTINGER-INSTALACION.md`. No subas contraseñas ni claves privadas al repositorio. No considerar producción hasta crear la base, configurar las variables privadas y probar pedidos, reservaciones, panel y respaldos.
 
-## Datos requeridos antes de lanzar
-- Dirección exacta y enlace de Google Maps.
-- WhatsApp oficial con lada internacional, teléfono e Instagram.
-- Horarios reales de brunch y dinner.
-- Carta aprobada: nombres, descripciones, precios, disponibilidad y fotografías oficiales.
-- Confirmar si la solicitud de reserva/pedido por WhatsApp es el flujo deseado.
+## Datos pendientes de SHALOM
+- WhatsApp oficial con lada internacional.
+- Dirección, horarios y enlaces oficiales.
+- Carta final con nombres, descripciones, precios y disponibilidad.
+- Horarios de reservación, capacidad por turno, duración de mesa y reglas para grupos.
+- Confirmar quién tendrá acceso al panel privado.
