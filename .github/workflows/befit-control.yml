@@ -5,6 +5,7 @@ on:
     paths:
       - "docs/befit.html"
       - "docs/befit-control.js"
+      - "docs/befit-weekly.js"
       - "docs/test-data/**"
       - "scripts/test-befit-control.mjs"
       - ".github/workflows/befit-control.yml"
@@ -15,6 +16,7 @@ on:
     paths:
       - "docs/befit.html"
       - "docs/befit-control.js"
+      - "docs/befit-weekly.js"
       - "docs/test-data/**"
       - "scripts/test-befit-control.mjs"
       - ".github/workflows/befit-control.yml"
@@ -28,6 +30,6 @@ jobs:
         with:
           node-version: 22
       - name: Check JavaScript syntax
-        run: node --check docs/befit-control.js
+        run: node --check docs/befit-control.js && node --check docs/befit-weekly.js
       - name: Run BEFIT smoke tests
         run: node scripts/test-befit-control.mjs
