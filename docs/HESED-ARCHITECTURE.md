@@ -3,7 +3,7 @@
 ## Mapa de proyectos
 - **ASSOCIATED**: portal de acceso y futura capa común de autenticación, permisos y navegación.
 - **SHALOM**: restaurante. Sitio comercial y tienda en `shalom-web/`, separados del panel operativo.
-- **BEFIT**: módulo inicial en `docs/befit.html` para registrar socios, gastos, campañas y objetivos; permite exportar CSV y respaldo JSON. Actualmente usa almacenamiento local.
+- **BEFIT**: módulo administrativo en `docs/befit.html` para socios, gastos, campañas y objetivos. La rama de trabajo `feat/befit-admin-reconciliation` añade Control financiero con importación XLSX/XLS/CSV, conciliación, captura de cortes, OCR de tickets, reportes e historial; conserva la información en IndexedDB/localStorage del navegador. Esta ampliación sigue en un PR borrador y no forma parte de `main`.
 - **LA HUERTA / AGROVA — Mi Parcela**: acceso en `docs/hesed-huerta.html` a una copia del HTML existente. Sus funciones originales no se han sustituido.
 
 ## Integrado en `main`
@@ -31,6 +31,8 @@
 
 ## Seguridad y límites
 - El módulo BEFIT actual es un prototipo local, no multiusuario.
+- El corte diario de Control financiero se captura manualmente; no importa todavía cierres desde un punto de venta ni se alimenta de forma automática desde transacciones operativas.
+- El OCR de tickets es asistivo, requiere revisión humana y no valida comprobantes fiscales.
 - El esquema SQL es una base inicial que debe revisarse y aplicarse en el proyecto Supabase del propietario; no está desplegado desde este repositorio.
 - Nunca exponer una clave `service_role` en HTML/JavaScript público.
 - El sitio comercial de SHALOM conserva campos de contacto vacíos y elementos de carta de ejemplo; no presentarlos como datos confirmados.
