@@ -21,7 +21,8 @@ for (const marker of [
   'HesedBefitWeekly.mount(root)', 'function capture()', 'function calculate(r)',
   'fixedExpenses', 'variableExpenses', 'terminals', 'activeUsers', 'expiredUsers',
   'whatsSent', 'whatsReceived', 'whatsAnswered', 'schedule', 'incidents',
-  'function printWeek(r)', 'function exportWeek(r)'
+  'function printWeek(r)', 'function exportWeek(r)',
+  '...(opsDays[i]||{})', 'Ya existe un registro para ', 'verifica que inicie en viernes'
 ]) {
   assert.ok(weekly.includes(marker) || control.includes(marker), 'Missing weekly feature or regression guard: ' + marker);
 }
