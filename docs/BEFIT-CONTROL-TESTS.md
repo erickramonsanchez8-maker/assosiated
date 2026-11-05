@@ -5,8 +5,9 @@
 - Importación de archivos .xlsx, .xls y .csv con asistente de mapeo de columnas.
 - Perfiles de mapeo guardados por sucursal y origen (recepción / administración).
 - Conservación de los dos archivos originales en IndexedDB, junto con SHA-256 para detectar reimportaciones.
-- Conciliación por movimiento usando fecha, sucursal, concepto, método y referencia; compara importes en centavos.
-- Detección de movimientos faltantes, importes distintos y duplicados. Las diferencias compensadas permanecen visibles por movimiento.
+- Conciliación por movimiento usando fecha, sucursal, concepto, método y referencia; compara importes en centavos y reconoce formatos `1,234.56` y `1.234,56`.
+- La importación guarda una conciliación inicial automáticamente; es posible volver a ejecutarla por sucursal después de revisar los datos.
+- Detección de movimientos faltantes, importes distintos y posibles duplicados por identidad del movimiento, incluso cuando el importe difiere. Las diferencias compensadas permanecen visibles por movimiento.
 - Historial de importaciones, versiones de conciliación y bitácora de auditoría.
 - Corte de caja diario por sucursal con fondo inicial, ingresos por forma de pago, gastos en efectivo, efectivo esperado, efectivo contado, diferencias, historial y exportación CSV.
 - Reporte mensual descargable en CSV e imprimible/guardable como PDF desde el navegador.
@@ -17,8 +18,8 @@
 2. Entra en **Control financiero**.
 3. Escribe Centro en sucursal.
 4. Importa primero test-data/befit-recepcion-prueba.csv como archivo de recepción y después test-data/befit-administracion-prueba.csv como archivo administrativo.
-5. Confirma el mapeo de columnas y pulsa **Guardar e importar**.
-6. Pulsa **Ejecutar conciliación**. Deben aparecer coincidencias, diferencias de importe, faltantes y duplicados. Los servicios A/B demuestran diferencias que se compensan en el total, pero que siguen detectadas individualmente.
+5. Confirma el mapeo de columnas y pulsa **Guardar e importar**. El sistema conserva los originales, detecta reimportaciones y genera una primera conciliación automáticamente.
+6. Comprueba coincidencias, diferencias de importe, faltantes y duplicados. Los servicios A/B demuestran diferencias que se compensan en el total, pero que siguen detectadas individualmente. **Ejecutar conciliación** permite recalcular la sucursal escrita en el campo correspondiente.
 7. Genera el reporte mensual de noviembre de 2026 y descarga el CSV.
 8. Captura un corte diario, guarda y comprueba el efectivo esperado y la diferencia.
 9. Imprime/guarda el corte y el reporte mensual como PDF; exporta el historial de cortes a CSV.
@@ -29,9 +30,10 @@
 - La carga de SheetJS y Tesseract.js requiere conexión a internet la primera vez.
 - OCR es asistivo, no una validación fiscal ni contable. El usuario debe revisar cada dato.
 - La tolerancia de conciliación es exacta ($0.00). La comparación por referencia/concepto no sustituye reglas específicas por sucursal.
-- El corte diario es independiente del flujo operativo y no bloquea ni reabre cierres con autorización.
+- El corte diario de esta versión se captura manualmente dentro del módulo Control financiero. No importa automáticamente cortes de un POS externo, no se alimenta de ventas registradas en otro módulo y no bloquea ni reabre cierres con autorización.
 - La exportación PDF usa el diálogo de impresión del navegador; no genera archivos PDF en segundo plano.
 - El historial conserva versiones anteriores de conciliación. La bitácora registra importaciones, conciliaciones y tickets guardados.
+- Los datos monetarios se almacenan en centavos enteros. El parser contempla separadores decimales y de miles mexicanos/europeos; revisa la vista previa y los totales antes de confirmar.
 - Antes de usar con información real, prueba en un perfil de navegador limpio y exporta respaldos. No es aún un sistema multiusuario de producción.
 
 ## Validación automatizada
