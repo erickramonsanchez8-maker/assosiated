@@ -4,6 +4,7 @@
 - **ASSOCIATED**: portal de acceso y futura capa común de autenticación, permisos y navegación.
 - **SHALOM**: restaurante. Sitio comercial y tienda en `shalom-web/`, separados del panel operativo.
 - **BEFIT**: módulo administrativo en `docs/befit.html` para socios, gastos, campañas y objetivos. La rama de trabajo `feat/befit-admin-reconciliation` añade Control financiero con importación XLSX/XLS/CSV de movimientos y cortes, conciliación, captura manual, OCR de tickets, reportes e historial; conserva la información en IndexedDB/localStorage del navegador. Esta ampliación sigue en un PR borrador y no forma parte de `main`.
+  - La rama incorpora un registro semanal basado en `FORMATO SEMANAL.xlsx`: BEFIT y FORUM por separado, semana viernes–jueves, ingresos en efectivo por AM/PM/F.S., unidades por terminal/transferencia, nómina, gastos fijos y variables, métricas, horarios, apertura e incidencias. Las semanas se guardan en IndexedDB y entran en el respaldo/restauración local.
 - **LA HUERTA / AGROVA — Mi Parcela**: acceso en `docs/hesed-huerta.html` a una copia del HTML existente. Sus funciones originales no se han sustituido.
 
 ## Integrado en `main`
