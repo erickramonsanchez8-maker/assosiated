@@ -14,6 +14,15 @@
 - Reporte mensual descargable en CSV e imprimible/guardable como PDF desde el navegador.
 - Escáner OCR en español para tickets; guarda la imagen original, el texto OCR y los campos editables para revisión.
 
+## Registro semanal BEFIT / FORUM
+- La sección **Administración BEFIT / FORUM** replica el flujo de las cuatro hojas del formato semanal: cortes diarios, nómina, catálogo de terminal/transferencia y reporte operativo.
+- Cada semana comienza en viernes y termina en jueves. BEFIT y FORUM se guardan como unidades separadas.
+- Captura ingresos de efectivo por AM, PM y F.S.; cantidad N/V, U/R, U/N y P; ventas de terminal mediante cantidades y precios unitarios editables; nómina en efectivo; gastos fijos y variables.
+- El catálogo de planes carga precios iniciales tomados del formato vacío, pero se pueden editar y deben verificarse antes del primer registro. No se copian nombres de personas de la plantilla.
+- El cálculo de ingresos, egresos y ganancia se hace con centavos enteros. La nómina se considera dentro de gastos fijos. Horarios, apertura e incidencias se guardan por día.
+- Los reportes semanales se pueden reabrir, imprimir/guardar como PDF o exportar a CSV. Se incluyen en el respaldo/restauración JSON.
+- Las abreviaturas N/V, U/R, U/N y P se conservan tal como aparecen en la hoja; no se les asigna una definición inventada.
+
 ## Prueba rápida
 1. Abre [BEFIT](https://erickramonsanchez8-maker.github.io/assosiated/befit.html) desde el portal HESED o directamente.
 2. Entra en **Control financiero**.
@@ -40,5 +49,5 @@
 - Antes de usar con información real, prueba en un perfil de navegador limpio y exporta respaldos. No es aún un sistema multiusuario de producción.
 
 ## Validación automatizada
-- GitHub Actions ejecuta `node --check docs/befit-control.js` y `node scripts/test-befit-control.mjs`.
-- Las pruebas smoke verifican sintaxis, integración HTML/script y resultados esperados de los CSV sintéticos; no sustituyen una prueba E2E en navegador.
+- GitHub Actions ejecuta `node --check docs/befit-control.js`, `node --check docs/befit-weekly.js` y `node scripts/test-befit-control.mjs`.
+- Las pruebas smoke verifican sintaxis, integración HTML/script, cálculo de agregados semanales y resultados esperados de los CSV sintéticos; no sustituyen una prueba E2E en navegador.
