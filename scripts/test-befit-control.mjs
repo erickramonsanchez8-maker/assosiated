@@ -9,7 +9,7 @@ const admin = readFileSync('docs/test-data/befit-administracion-prueba.csv', 'ut
 
 new vm.Script(control, { filename: 'befit-control.js' });
 assert.match(html, /data-tab="control"/, 'BEFIT must expose the financial-control tab');
-assert.match(html, /befit-control\\.js/, 'BEFIT must load the financial-control module');
+assert.match(html, /befit-control\.js/, 'BEFIT must load the financial-control module');
 
 for (const marker of [
   'cashClosings', 'saveCashClose', 'renderCashHistory', 'reconcile', 'scanTicket',
