@@ -4,8 +4,9 @@ import vm from 'node:vm';
 
 const control = readFileSync('docs/befit-control.js', 'utf8');
 const html = readFileSync('docs/befit.html', 'utf8');
-const reception = readFileSync('docs/test-data/befit-recepcion-prueba.csv', 'utf8').trim().split(/\\r?\\n/);
-const admin = readFileSync('docs/test-data/befit-administracion-prueba.csv', 'utf8').trim().split(/\\r?\\n/);
+const csvLines = content => content.replaceAll(String.fromCharCode(13), '').trim().split(String.fromCharCode(10));
+const reception = csvLines(readFileSync('docs/test-data/befit-recepcion-prueba.csv', 'utf8'));
+const admin = csvLines(readFileSync('docs/test-data/befit-administracion-prueba.csv', 'utf8'));
 
 new vm.Script(control, { filename: 'befit-control.js' });
 assert.match(html, /data-tab="control"/, 'BEFIT must expose the financial-control tab');
