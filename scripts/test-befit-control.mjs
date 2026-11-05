@@ -15,6 +15,7 @@ assert.match(html, /befit-control\.js/, 'BEFIT must load the financial-control m
 for (const marker of [
   'cashClosings', 'saveCashClose', 'renderCashHistory', 'reconcile', 'scanTicket',
   'fieldConfidence', 'bcMonthPDF', 'backupControl', 'restoreControl',
+  'cashImports', 'readCashCuts', 'saveCashCuts', 'bcCashCutFile', 'bcReadCashCuts', 'bcSaveCashCuts',
   'Conciliación automática', 'countSignatures=rows=>', 'eligible=branch?',
   "await put('reconciliations',result)", "f.total==null?'No detectado'"
 ]) {
