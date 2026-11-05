@@ -24,7 +24,7 @@ assert.match(control, /const localDate=/, 'Date defaults must use the local cale
 
 // Exercise the exact money parser embedded in the browser module.
 const centsStart = control.indexOf('const cents=');
-const centsEnd = control.indexOf('\\nconst localDate', centsStart);
+const centsEnd = control.indexOf('const localDate=', centsStart);
 assert.ok(centsStart >= 0 && centsEnd > centsStart, 'Money parser must remain a standalone pure helper');
 const centsExpression = control.slice(centsStart + 'const cents='.length, centsEnd).trim().replace(/;$/, '');
 const cents = vm.runInNewContext(`(${centsExpression})`);
