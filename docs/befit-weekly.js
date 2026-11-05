@@ -101,6 +101,7 @@ async function saveCurrent(){
  if(!r.weekStart||new Date(r.weekStart+'T12:00:00').getDay()!==5){alert('La semana debe comenzar en viernes para respetar el formato de referencia.');return}
  if(r.days.concat([]).some(d=>[d.am,d.pm,d.fs].some(v=>v<0))||r.terminals.some(x=>x.price<0||x.qty<0)||r.payroll.some(x=>x.amount<0)||r.fixedExpenses.some(x=>x.amount<0)||r.variableExpenses.some(x=>x.amount<0)){alert('Revisa los importes y cantidades: no pueden ser negativos.');return}
  const existing=(await all()).find(x=>x.brand===r.brand&&x.weekStart===r.weekStart);
+ if(existing&&!activeId&&!confirm('Ya existe un registro para '+r.brand+' en la semana '+r.weekStart+'. ¿Deseas reemplazarlo?'))return;
  r.id=activeId||(existing?.id)||crypto.randomUUID();r.createdAt=existing?.createdAt||new Date().toISOString();r.updatedAt=new Date().toISOString();
  const result=calculate(r);r.totals=result.totals;r.derived=result.derived;
  await put(r);activeId=r.id;audit('Control semanal guardado',{id:r.id,brand:r.brand,weekStart:r.weekStart,totals:r.totals,derived:r.derived});
@@ -142,7 +143,12 @@ async function mount(root){
  if(!root||document.getElementById('bwApp'))return;
  root.insertAdjacentHTML('afterbegin','<div class="bc-subpanel" id="bwApp"><div class="bw-top"><div><span class="bw-kicker">Control semanal · basado en tu formato</span><h3>Administración BEFIT / FORUM</h3><p class="bc-muted">Registro de ingresos, nómina, gastos y métricas. Cada unidad y semana se guarda por separado.</p></div><span class="tag">Registro semanal</span></div><div class="bw-selector"><label>Unidad de negocio<select id="bwBrand"><option value="BEFIT">BEFIT</option><option value="FORUM">FORUM</option></select></label><label>Inicio de semana · viernes<input id="bwWeekStart" type="date" value="'+lastFriday()+'"></label><label>Fin de semana<strong id="bwWeekEnd">'+addDays(lastFriday(),6)+'</strong></label><div class="bw-actions"><button type="button" class="btn secondary" id="bwLoad">Cargar semana</button><button type="button" class="btn secondary" id="bwNew">Nueva semana</button></div></div><p id="bwCurrentTitle" class="bc-muted">Nueva semana</p><div id="bwEntry"></div><div class="bw-history"><h4>Historial de semanas guardadas</h4><div id="bwHistory"></div></div></div>');
  try{db=await openDB()}catch(e){$('bwEntry').innerHTML='<p class="bc-muted">No se pudo abrir el almacenamiento semanal. '+esc(e.message)+'</p>';return}
- $('bwWeekStart').addEventListener('change',()=>{$('bwWeekEnd').textContent=$('bwWeekStart').value?addDays($('bwWeekStart').value,6):'—'});
+ $('bwWeekStart').addEventListener('change',()=>{
+  const start=$('bwWeekStart').value;$('bwWeekEnd').textContent=start?addDays(start,6):'—';
+  if(start)document.querySelectorAll('#bwEntry tr[data-day-index]').forEach((tr,i)=>{const dateCell=tr.querySelector('td:first-child small');if(dateCell)dateCell.textContent=addDays(start,i)});
+  activeId=null;$('bwCurrentTitle').textContent='Nueva semana · verifica que inicie en viernes';
+ });
+ $('bwBrand').addEventListener('change',()=>{activeId=null;$('bwCurrentTitle').textContent='Nueva semana · '+$('bwBrand').value});
  $('bwLoad').onclick=async()=>{const r=(await all()).find(x=>x.brand===$('bwBrand').value&&x.weekStart===$('bwWeekStart').value);if(r)await loadWeek(r.id);else{activeId=null;$('bwCurrentTitle').textContent='No hay registro: '+$('bwBrand').value+' · '+$('bwWeekStart').value;build(blank($('bwBrand').value,$('bwWeekStart').value))}};
  $('bwNew').onclick=loadBlank;
  $('bwHistory').addEventListener('click',e=>{const b=e.target.closest('[data-load-week]');if(b)loadWeek(b.dataset.loadWeek)});
