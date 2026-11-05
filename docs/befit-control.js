@@ -2,7 +2,7 @@
    IndexedDB para archivos originales, conciliaciones, tickets y auditoría.
    No reemplaza los registros operativos existentes de BEFIT. */
 (()=>{'use strict';
-const DB='hesed_befit_admin', VERSION=2, $=id=>document.getElementById(id);
+const DB='hesed_befit_admin', VERSION=3, $=id=>document.getElementById(id);
 const money=n=>new Intl.NumberFormat('es-MX',{style:'currency',currency:'MXN'}).format((Number(n)||0)/100);
 const cents=v=>{
  if(typeof v==='number')return Number.isFinite(v)?Math.round(v*100):0;
@@ -16,8 +16,8 @@ const cents=v=>{
 const localDate=()=>{const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')};
 const iso=v=>{if(!v)return '';if(v instanceof Date&&!isNaN(v))return v.getFullYear()+'-'+String(v.getMonth()+1).padStart(2,'0')+'-'+String(v.getDate()).padStart(2,'0');if(typeof v==='number'&&window.XLSX){const d=XLSX.SSF.parse_date_code(v);if(d)return [d.y,String(d.m).padStart(2,'0'),String(d.d).padStart(2,'0')].join('-')}const s=String(v).trim();if(/^\d{4}-\d{2}-\d{2}/.test(s))return s.slice(0,10);const m=s.match(/^(\d{1,2})[\/.-](\d{1,2})[\/.-](\d{2,4})$/);if(m)return [m[3].length===2?'20'+m[3]:m[3],m[2].padStart(2,'0'),m[1].padStart(2,'0')].join('-');return s};
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-let db, receptionist=[], admin=[], recFile=null, admFile=null, recMap={}, admMap={}, activeTicket=null;
-function openDB(){return new Promise((resolve,reject)=>{const q=indexedDB.open(DB,VERSION);q.onupgradeneeded=()=>{const d=q.result;for(const [n,opts] of [['imports',{keyPath:'id'}],['reconciliations',{keyPath:'id'}],['tickets',{keyPath:'id'}],['audit',{keyPath:'id'}],['mappings',{keyPath:'id'}],['cashClosings',{keyPath:'id'}]])if(!d.objectStoreNames.contains(n))d.createObjectStore(n,opts)};q.onsuccess=()=>resolve(q.result);q.onerror=()=>reject(q.error)})}
+let db, receptionist=[], admin=[], recFile=null, admFile=null, recMap={}, admMap={}, activeTicket=null, cashCutFile=null, cashCutMap={};
+function openDB(){return new Promise((resolve,reject)=>{const q=indexedDB.open(DB,VERSION);q.onupgradeneeded=()=>{const d=q.result;for(const [n,opts] of [['imports',{keyPath:'id'}],['reconciliations',{keyPath:'id'}],['tickets',{keyPath:'id'}],['audit',{keyPath:'id'}],['mappings',{keyPath:'id'}],['cashClosings',{keyPath:'id'}],['cashImports',{keyPath:'id'}]])if(!d.objectStoreNames.contains(n))d.createObjectStore(n,opts)};q.onsuccess=()=>resolve(q.result);q.onerror=()=>reject(q.error)})}
 function tx(store,mode='readonly'){return db.transaction(store,mode).objectStore(store)}
 function all(store){return new Promise((res,rej)=>{const q=tx(store).getAll();q.onsuccess=()=>res(q.result||[]);q.onerror=()=>rej(q.error)})}
 function put(store,v){return new Promise((res,rej)=>{const q=tx(store,'readwrite').put(v);q.onsuccess=()=>res(q.result);q.onerror=()=>rej(q.error)})}
@@ -32,6 +32,65 @@ async function readExcel(file,role){await loadXLSX();const branch=$('bcBranch').
 panel.querySelectorAll('[data-map]').forEach(s=>s.addEventListener('change',()=>{const m=role==='recepcion'?recMap:admMap;m[s.dataset.field]=s.value===''?null:Number(s.value)}));
 if(role==='recepcion')recFile=file;else admFile=file;
 }
+const cashCutFields=[['date','Fecha del corte'],['branch','Sucursal'],['opening','Fondo inicial'],['cashSales','Ventas en efectivo'],['card','Ventas con tarjeta'],['transfer','Transferencias'],['other','Otros ingresos'],['expenses','Gastos en efectivo'],['counted','Efectivo contado'],['note','Notas']];
+function cashCutGuess(headers,key){
+ const patterns={date:/fecha|date|dia|corte/,branch:/sucursal|unidad|branch|ubicacion|local/,opening:/fondo|apertura|inicial/,cashSales:/venta.*efectivo|efectivo.*venta|cash sales|ingresos efectivo/,card:/tarjeta|card/,transfer:/transferencia|transfer/,other:/otros ingresos|other income|otros/,expenses:/gasto.*efectivo|egreso.*efectivo|cash expenses/,counted:/efectivo contado|conteo efectivo|cash counted|arqueo|real contado/,note:/nota|observacion|comentario/};
+ return headers.findIndex(h=>patterns[key].test(norm(h)));
+}
+function cashCutMappingUI(headers){
+ return '<div class="bc-mapgrid">'+cashCutFields.map(([key,label])=>{
+  const guess=cashCutGuess(headers,key),saved=cashCutMap[key],selected=saved??(guess>=0?guess:null),required=['date','counted'].includes(key);
+  return '<label>'+label+(required?' *':'')+'<select data-cashcut-field="'+key+'"><option value="">— No asignar —</option>'+headers.map((h,i)=>'<option value="'+i+'" '+(String(selected)===String(i)?'selected':'')+'>'+esc(h||('Columna '+(i+1)))+'</option>').join('')+'</select></label>';
+ }).join('')+'</div>';
+}
+async function readCashCuts(file){
+ if(!file)throw Error('Selecciona un archivo de cortes de caja.');
+ if(!/\.(xlsx|xls|csv)$/i.test(file.name))throw Error('El archivo debe ser XLSX, XLS o CSV.');
+ if(file.size>40*1024*1024)throw Error('El archivo supera 40 MB.');
+ await loadXLSX();
+ const req=tx('mappings').get('cashcuts|default'),profile=await new Promise((resolve,reject)=>{req.onsuccess=()=>resolve(req.result);req.onerror=()=>reject(req.error)});
+ cashCutMap=profile?.fields||{};
+ const wb=XLSX.read(await file.arrayBuffer(),{type:'array',cellDates:true});
+ if(!wb.SheetNames.length)throw Error('El archivo no contiene hojas.');
+ const raw=XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]],{header:1,defval:'',raw:true});
+ if(raw.length<2)throw Error('No se encontraron filas de cortes en la primera hoja.');
+ const headers=raw[0].map(x=>String(x??'').trim()),rows=raw.slice(1).filter(r=>r.some(v=>String(v??'').trim()!==''));
+ if(!rows.length)throw Error('No se encontraron filas con datos.');
+ const panel=$('bcCashMapping');cashCutFile=file;
+ panel.innerHTML='<h3>Confirma las columnas del corte</h3><p class="bc-muted">Mapea fecha y efectivo contado. La sucursal puede venir en el archivo o tomarse del campo Sucursal del corte manual. Los importes no mapeados se tomarán como cero. Revisa la vista previa.</p>'+cashCutMappingUI(headers)+'<p class="bc-muted">'+rows.length+' filas detectadas · Hoja: '+esc(wb.SheetNames[0])+' · Archivo: '+esc(file.name)+'</p><div class="bc-tablewrap"><table><thead><tr>'+headers.slice(0,8).map(h=>'<th>'+esc(h)+'</th>').join('')+'</tr></thead><tbody>'+rows.slice(0,4).map(r=>'<tr>'+headers.slice(0,8).map((_,i)=>'<td>'+esc(r[i])+'</td>').join('')+'</tr>').join('')+'</tbody></table></div>';
+ panel.dataset.headers=JSON.stringify(headers);panel.dataset.rows=JSON.stringify(rows);panel.classList.remove('bc-hidden');
+ panel.querySelectorAll('[data-cashcut-field]').forEach(el=>el.addEventListener('change',()=>{cashCutMap[el.dataset.cashcutField]=el.value===''?null:Number(el.value)}));
+ $('bcCashImportStatus').textContent='Archivo leído. Confirma el mapeo y selecciona Importar cortes.';
+}
+async function saveCashCuts(){
+ const file=cashCutFile,panel=$('bcCashMapping');if(!file||!panel.dataset.rows)throw Error('Primero lee el archivo y confirma las columnas.');
+ panel.querySelectorAll('[data-cashcut-field]').forEach(el=>cashCutMap[el.dataset.cashcutField]=el.value===''?null:Number(el.value));
+ if(cashCutMap.date==null||cashCutMap.counted==null)throw Error('Asigna obligatoriamente las columnas Fecha y Efectivo contado.');
+ const rows=JSON.parse(panel.dataset.rows),fallbackBranch=$('bcCashBranch').value.trim(),errors=[],closes=[];
+ rows.forEach((row,index)=>{
+  if(!row.some(v=>String(v??'').trim()!==''))return;
+  const get=k=>cashCutMap[k]==null?'':row[cashCutMap[k]];
+  const date=iso(get('date')),branch=String(get('branch')||fallbackBranch).trim(),countedRaw=get('counted');
+  if(!date||!branch||String(countedRaw??'').trim()===''){errors.push('Fila '+(index+2)+': falta fecha, sucursal o efectivo contado.');return}
+  const amount=k=>get(k)===''||get(k)==null?0:cents(get(k));
+  const opening=amount('opening'),cashSales=amount('cashSales'),card=amount('card'),transfer=amount('transfer'),other=amount('other'),expenses=amount('expenses'),counted=cents(countedRaw);
+  if([opening,cashSales,card,transfer,other,expenses,counted].some(v=>!Number.isFinite(v)||v<0)){errors.push('Fila '+(index+2)+': contiene un importe negativo o no válido.');return}
+  const expected=opening+cashSales-expenses,variance=counted-expected;
+  closes.push({id:crypto.randomUUID(),date,branch,opening,cashSales,card,transfer,other,expenses,counted,expected,variance,totalIncome:cashSales+card+transfer+other,note:String(get('note')||'').trim(),createdAt:new Date().toISOString(),status:variance===0?'Cuadrado':variance>0?'Sobrante':'Faltante',sourceFile:file.name});
+ });
+ if(errors.length)throw Error('No se importó ningún corte. '+errors.slice(0,4).join(' '));
+ if(!closes.length)throw Error('No hay cortes válidos para importar.');
+ const hash=Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',await file.arrayBuffer()))).map(v=>v.toString(16).padStart(2,'0')).join('');
+ const existing=await all('cashImports');if(existing.some(x=>x.hash===hash))throw Error('Este archivo de cortes ya fue importado.');
+ const batch={id:crypto.randomUUID(),fileName:file.name,size:file.size,hash,blob:file,rows:closes.length,createdAt:new Date().toISOString(),mapping:{...cashCutMap}};
+ await put('cashImports',batch);
+ for(const close of closes){close.cashImportId=batch.id;await put('cashClosings',close)}
+ await put('mappings',{id:'cashcuts|default',fields:cashCutMap,updatedAt:new Date().toISOString()});
+ await audit('Cortes de caja importados',{batchId:batch.id,file:file.name,rows:closes.length,branches:[...new Set(closes.map(x=>x.branch))]});
+ $('bcCashImportStatus').textContent=closes.length+' cortes importados correctamente desde '+file.name+'.';
+ await renderCashHistory();toast(closes.length+' cortes de caja importados.');
+}
+
 function mappedRows(panel,role,branch){const headers=JSON.parse(panel.dataset.headers||'[]'),rows=JSON.parse(panel.dataset.rows||'[]'),m=role==='recepcion'?recMap:admMap;const selects=panel.querySelectorAll('[data-field]');selects.forEach(s=>m[s.dataset.field]=s.value===''?null:Number(s.value));if(m.amount===null||m.amount===undefined)throw Error('Asigna una columna de importe para continuar.');return rows.map((r,i)=>{const get=k=>m[k]===null||m[k]===undefined?'':r[m[k]];return {row:i+2,date:iso(get('date')),branch:String(get('branch')||branch||'').trim(),concept:String(get('concept')).trim(),method:String(get('method')).trim().toLowerCase(),amount:cents(get('amount')),reference:String(get('reference')).trim()}}).filter(x=>x.amount||x.concept||x.reference)}
 async function saveImports(){
  if(!recFile||!admFile)throw Error('Selecciona ambos archivos: recepción y administración.');
@@ -93,15 +152,15 @@ function printReport(title,html){const w=window.open('','_blank','width=900,heig
 function blobToDataURL(blob){return new Promise((resolve,reject)=>{if(!(blob instanceof Blob)){resolve(null);return}const reader=new FileReader();reader.onload=()=>resolve(reader.result);reader.onerror=()=>reject(reader.error);reader.readAsDataURL(blob)})}
 function dataURLToBlob(value){if(!value||typeof value!=='string'||!value.startsWith('data:'))return value;const [meta,b64]=value.split(',');const mime=(meta.match(/data:([^;]+)/)||[])[1]||'application/octet-stream';const bytes=Uint8Array.from(atob(b64),c=>c.charCodeAt(0));return new Blob([bytes],{type:mime})}
 async function backupControl(){
- const stores=['imports','reconciliations','tickets','audit','mappings','cashClosings'],payload={app:'HESED-BEFIT-CONTROL',version:1,exportedAt:new Date().toISOString(),stores:{}};
- for(const name of stores){payload.stores[name]=await Promise.all((await all(name)).map(async item=>{const copy={...item};if(name==='imports'){copy.recepcion={...copy.recepcion,blobData:await blobToDataURL(copy.recepcion.blob)};delete copy.recepcion.blob;copy.admin={...copy.admin,blobData:await blobToDataURL(copy.admin.blob)};delete copy.admin.blob}if(name==='tickets'){copy.blobData=await blobToDataURL(copy.blob);delete copy.blob}return copy}))}
+ const stores=['imports','reconciliations','tickets','audit','mappings','cashClosings','cashImports'],payload={app:'HESED-BEFIT-CONTROL',version:1,exportedAt:new Date().toISOString(),stores:{}};
+ for(const name of stores){payload.stores[name]=await Promise.all((await all(name)).map(async item=>{const copy={...item};if(name==='imports'){copy.recepcion={...copy.recepcion,blobData:await blobToDataURL(copy.recepcion.blob)};delete copy.recepcion.blob;copy.admin={...copy.admin,blobData:await blobToDataURL(copy.admin.blob)};delete copy.admin.blob}if(name==='tickets'||name==='cashImports'){copy.blobData=await blobToDataURL(copy.blob);delete copy.blob}return copy}))}
  const json=JSON.stringify(payload);download('befit-control-respaldo-'+new Date().toISOString().slice(0,10)+'.json',json,'application/json');await audit('Respaldo completo exportado',{bytes:json.length,stores});
 }
 async function restoreControl(file){
  if(!file)throw Error('Selecciona un respaldo JSON.');if(file.size>150*1024*1024)throw Error('El respaldo supera 150 MB. Divide el respaldo antes de restaurarlo.');
  const payload=JSON.parse(await file.text());if(payload.app!=='HESED-BEFIT-CONTROL'||payload.version!==1||!payload.stores)throw Error('El archivo no es un respaldo válido de BEFIT Control.');
  const allowed=['imports','reconciliations','tickets','audit','mappings','cashClosings'];let restored=0;
- for(const name of allowed){for(const raw of payload.stores[name]||[]){const item={...raw};if(name==='imports'){if(item.recepcion?.blobData){item.recepcion={...item.recepcion,blob:dataURLToBlob(item.recepcion.blobData)};delete item.recepcion.blobData}if(item.admin?.blobData){item.admin={...item.admin,blob:dataURLToBlob(item.admin.blobData)};delete item.admin.blobData}}if(name==='tickets'&&item.blobData){item.blob=dataURLToBlob(item.blobData);delete item.blobData}if(!item.id)continue;await put(name,item);restored++}}
+ for(const name of allowed){for(const raw of payload.stores[name]||[]){const item={...raw};if(name==='imports'){if(item.recepcion?.blobData){item.recepcion={...item.recepcion,blob:dataURLToBlob(item.recepcion.blobData)};delete item.recepcion.blobData}if(item.admin?.blobData){item.admin={...item.admin,blob:dataURLToBlob(item.admin.blobData)};delete item.admin.blobData}}if((name==='tickets'||name==='cashImports')&&item.blobData){item.blob=dataURLToBlob(item.blobData);delete item.blobData}if(!item.id)continue;await put(name,item);restored++}}
  await audit('Respaldo restaurado',{filename:file.name,records:restored});await renderHistory();await renderCashHistory();toast('Respaldo restaurado. Se combinaron los registros por identificador.');
 }
 
