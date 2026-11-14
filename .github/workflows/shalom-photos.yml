@@ -1,0 +1,114 @@
+name: Shalom Photos - Contact Sheet
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  process-photos:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install image tools
+        run: python -m pip install --upgrade Pillow
+
+      - name: Extract ZIP and build contact sheet
+        shell: bash
+        run: |
+          python <<'PY'
+          from pathlib import Path
+          from zipfile import ZipFile
+          from PIL import Image, ImageOps, ImageDraw, ImageFont
+          import csv, shutil
+
+          root = Path.cwd()
+          zips = sorted(root.glob("*.zip")) + sorted(root.glob("**/*.zip"))
+          zips = [p for p in zips if ".git" not in p.parts and "node_modules" not in p.parts]
+          if not zips:
+              raise SystemExit("No se encontró ningún ZIP en el repositorio.")
+
+          source = zips[0]
+          out = root / "shalom-photo-output"
+          extracted = out / "photos"
+          if out.exists():
+              shutil.rmtree(out)
+          extracted.mkdir(parents=True)
+
+          with ZipFile(source) as archive:
+              for item in archive.infolist():
+                  name = item.filename.replace("\\", "/")
+                  if item.is_dir() or name.startswith("/") or ".." in Path(name).parts or "__MACOSX" in Path(name).parts:
+                      continue
+                  suffix = Path(name).suffix.lower()
+                  if suffix not in {".jpg", ".jpeg", ".png", ".webp", ".heic", ".heif"}:
+                      continue
+                  target = extracted / Path(name).name
+                  stem, ext, n = target.stem, target.suffix, 1
+                  while target.exists():
+                      target = extracted / f"{stem}_{n}{ext}"
+                      n += 1
+                  with archive.open(item) as src, target.open("wb") as dst:
+                      shutil.copyfileobj(src, dst)
+
+          files = sorted([p for p in extracted.iterdir() if p.is_file()])
+          readable = []
+          rows = []
+          for p in files:
+              try:
+                  with Image.open(p) as im:
+                      im.verify()
+                  with Image.open(p) as im:
+                      readable.append((p, im.copy().convert("RGB")))
+                  rows.append([p.name, "image", ""])
+              except Exception as exc:
+                  rows.append([p.name, "unsupported_or_corrupt", str(exc)[:180]])
+
+          with (out / "inventory.csv").open("w", newline="", encoding="utf-8-sig") as f:
+              writer = csv.writer(f)
+              writer.writerow(["filename", "status", "notes"])
+              writer.writerows(rows)
+
+          if not readable:
+              raise SystemExit("El ZIP no contiene imágenes legibles compatibles. Revisa si son HEIC/HEIF.")
+
+          cols, cell_w, image_h, label_h = 4, 260, 190, 48
+          rows_count = (len(readable) + cols - 1) // cols
+          sheet = Image.new("RGB", (cols * cell_w, rows_count * (image_h + label_h)), "white")
+          draw = ImageDraw.Draw(sheet)
+          try:
+              font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 15)
+              small = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 12)
+          except Exception:
+              font = small = ImageFont.load_default()
+
+          for idx, (path, im) in enumerate(readable, 1):
+              x, y = ((idx - 1) % cols) * cell_w, ((idx - 1) // cols) * (image_h + label_h)
+              thumb = ImageOps.contain(im, (cell_w - 16, image_h - 12))
+              px, py = x + (cell_w - thumb.width)//2, y + (image_h - thumb.height)//2
+              sheet.paste(thumb, (px, py))
+              draw.rectangle((x, y, x + cell_w - 1, y + image_h + label_h - 1), outline=(220,220,220), width=1)
+              draw.text((x + 8, y + image_h + 5), f"#{idx:03d}  {path.name[:30]}", fill=(20,20,20), font=font)
+              draw.text((x + 8, y + image_h + 27), f"{im.width} × {im.height}", fill=(100,100,100), font=small)
+
+          sheet.save(out / "contact-sheet.jpg", quality=88, optimize=True)
+          print(f"ZIP: {source.name}")
+          print(f"Imágenes legibles: {len(readable)} / archivos de imagen: {len(files)}")
+          print(f"Hoja de contacto: {out / 'contact-sheet.jpg'}")
+          PY
+
+      - name: Upload contact sheet and extracted photos
+        uses: actions/upload-artifact@v4
+        with:
+          name: shalom-photo-analysis
+          path: shalom-photo-output/
+          if-no-files-found: error
+          retention-days: 14
