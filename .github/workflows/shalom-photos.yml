@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   process-photos:
@@ -35,7 +35,6 @@ jobs:
           zips = [p for p in zips if ".git" not in p.parts and "node_modules" not in p.parts]
           if not zips:
               raise SystemExit("No se encontró ningún ZIP en el repositorio.")
-
           source = zips[0]
           out = root / "shalom-photo-output"
           extracted = out / "photos"
@@ -48,8 +47,7 @@ jobs:
                   name = item.filename.replace("\\", "/")
                   if item.is_dir() or name.startswith("/") or ".." in Path(name).parts or "__MACOSX" in Path(name).parts:
                       continue
-                  suffix = Path(name).suffix.lower()
-                  if suffix not in {".jpg", ".jpeg", ".png", ".webp", ".heic", ".heif"}:
+                  if Path(name).suffix.lower() not in {".jpg", ".jpeg", ".png", ".webp", ".heic", ".heif"}:
                       continue
                   target = extracted / Path(name).name
                   stem, ext, n = target.stem, target.suffix, 1
@@ -60,50 +58,89 @@ jobs:
                       shutil.copyfileobj(src, dst)
 
           files = sorted([p for p in extracted.iterdir() if p.is_file()])
-          readable = []
-          rows = []
+          readable, inventory = [], []
           for p in files:
               try:
                   with Image.open(p) as im:
                       im.verify()
                   with Image.open(p) as im:
                       readable.append((p, im.copy().convert("RGB")))
-                  rows.append([p.name, "image", ""])
+                  inventory.append([p.name, "image", ""])
               except Exception as exc:
-                  rows.append([p.name, "unsupported_or_corrupt", str(exc)[:180]])
+                  inventory.append([p.name, "unsupported_or_corrupt", str(exc)[:180]])
 
           with (out / "inventory.csv").open("w", newline="", encoding="utf-8-sig") as f:
-              writer = csv.writer(f)
-              writer.writerow(["filename", "status", "notes"])
-              writer.writerows(rows)
+              writer = csv.writer(f); writer.writerow(["filename", "status", "notes"]); writer.writerows(inventory)
 
           if not readable:
-              raise SystemExit("El ZIP no contiene imágenes legibles compatibles. Revisa si son HEIC/HEIF.")
+              raise SystemExit("No se encontraron imágenes legibles.")
 
           cols, cell_w, image_h, label_h = 4, 260, 190, 48
-          rows_count = (len(readable) + cols - 1) // cols
-          sheet = Image.new("RGB", (cols * cell_w, rows_count * (image_h + label_h)), "white")
+          sheet = Image.new("RGB", (cols*cell_w, ((len(readable)+cols-1)//cols)*(image_h+label_h)), "white")
           draw = ImageDraw.Draw(sheet)
           try:
-              font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 15)
-              small = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 12)
+              font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 13)
+              small = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 11)
           except Exception:
               font = small = ImageFont.load_default()
-
           for idx, (path, im) in enumerate(readable, 1):
-              x, y = ((idx - 1) % cols) * cell_w, ((idx - 1) // cols) * (image_h + label_h)
-              thumb = ImageOps.contain(im, (cell_w - 16, image_h - 12))
-              px, py = x + (cell_w - thumb.width)//2, y + (image_h - thumb.height)//2
-              sheet.paste(thumb, (px, py))
-              draw.rectangle((x, y, x + cell_w - 1, y + image_h + label_h - 1), outline=(220,220,220), width=1)
-              draw.text((x + 8, y + image_h + 5), f"#{idx:03d}  {path.name[:30]}", fill=(20,20,20), font=font)
-              draw.text((x + 8, y + image_h + 27), f"{im.width} × {im.height}", fill=(100,100,100), font=small)
-
+              x, y = ((idx-1)%cols)*cell_w, ((idx-1)//cols)*(image_h+label_h)
+              thumb = ImageOps.contain(im, (cell_w-16, image_h-12))
+              sheet.paste(thumb, (x+(cell_w-thumb.width)//2, y+(image_h-thumb.height)//2))
+              draw.rectangle((x,y,x+cell_w-1,y+image_h+label_h-1), outline=(220,220,220))
+              draw.text((x+8,y+image_h+5), f"#{idx:03d} {path.name[:30]}", fill=(20,20,20), font=font)
+              draw.text((x+8,y+image_h+27), f"{im.width} x {im.height}", fill=(100,100,100), font=small)
           sheet.save(out / "contact-sheet.jpg", quality=88, optimize=True)
-          print(f"ZIP: {source.name}")
-          print(f"Imágenes legibles: {len(readable)} / archivos de imagen: {len(files)}")
-          print(f"Hoja de contacto: {out / 'contact-sheet.jpg'}")
+          print(f"ZIP: {source.name}; imágenes legibles: {len(readable)}")
           PY
+
+      - name: Prepare selected Shalom photos (exclude BEFIT gym images)
+        shell: bash
+        run: |
+          python <<'PY'
+          from pathlib import Path
+          from PIL import Image, ImageOps
+          import shutil
+
+          src = Path("shalom-photo-output/photos")
+          # Estas diez fotografías fueron identificadas visualmente como Shalom.
+          selection = {
+              "WhatsApp Image 2026-11-04 at 7.08.04 PM (2).jpeg": "interior-01.jpg",
+              "WhatsApp Image 2026-11-04 at 7.08.04 PM (3).jpeg": "dish-01.jpg",
+              "WhatsApp Image 2026-11-04 at 7.08.05 PM (1).jpeg": "hero.jpg",
+              "WhatsApp Image 2026-11-04 at 7.08.05 PM (2).jpeg": "dish-02.jpg",
+              "WhatsApp Image 2026-11-04 at 7.08.05 PM (3).jpeg": "drink.jpg",
+              "WhatsApp Image 2026-11-04 at 7.08.05 PM.jpeg": "interior-02.jpg",
+              "WhatsApp Image 2026-11-04 at 7.08.06 PM (1).jpeg": "dish-03.jpg",
+              "WhatsApp Image 2026-11-04 at 7.08.06 PM.jpeg": "dish-04.jpg",
+              "WhatsApp Image 2026-11-04 at 7.08.07 PM (1).jpeg": "interior-03.jpg",
+              "WhatsApp Image 2026-11-04 at 7.08.07 PM (2).jpeg": "exterior.jpg",
+          }
+          destinations = [Path("docs/assets/shalom"), Path("shalom-web/assets/photos")]
+          for dest in destinations:
+              dest.mkdir(parents=True, exist_ok=True)
+          for filename, outname in selection.items():
+              source = src / filename
+              if not source.exists():
+                  raise SystemExit(f"Falta la fotografía esperada: {filename}")
+              with Image.open(source) as im:
+                  im = ImageOps.exif_transpose(im).convert("RGB")
+                  # Los archivos verticales son capturas del visor del teléfono:
+                  # se recorta la interfaz negra y se conserva la fotografía.
+                  if im.height > 900 and im.width < 600:
+                      im = im.crop((0, 190, im.width, min(835, im.height)))
+                  for dest in destinations:
+                      im.save(dest / outname, "JPEG", quality=88, optimize=True, progressive=True)
+          print(f"Fotografías Shalom preparadas: {len(selection)}; copiadas a ambas carpetas web.")
+          PY
+
+      - name: Commit optimized Shalom photos
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/assets/shalom shalom-web/assets/photos
+          git diff --cached --quiet || git commit -m "Add optimized Shalom restaurant photos"
+          git push
 
       - name: Upload contact sheet and extracted photos
         uses: actions/upload-artifact@v4
