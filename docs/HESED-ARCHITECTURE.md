@@ -1,36 +1,33 @@
-# HESED — arquitectura y estado de integración
+# HESED — arquitectura y estado del sistema
 
-## Mapa de proyectos
-- **ASSOCIATED**: portal de acceso y futura capa común de autenticación, permisos y navegación.
-- **SHALOM**: restaurante. Sitio comercial y tienda en `shalom-web/`, separados del panel operativo.
-- **BEFIT**: módulo inicial en `docs/befit.html` para registrar socios, gastos, campañas y objetivos; permite exportar CSV y respaldo JSON. Actualmente usa almacenamiento local.
-- **LA HUERTA / AGROVA — Mi Parcela**: acceso en `docs/hesed-huerta.html` a una copia del HTML existente. Sus funciones originales no se han sustituido.
+## Estructura principal
+- `HESED_LOCAL.html`: acceso local central y selector de empresas. Incluye el área administrativa de SHALOM y la integración local de Mi Parcela para LA HUERTA.
+- `docs/hesed.html`: portal de entrada para GitHub Pages e instalación como aplicación web.
+- `docs/befit.html`: módulo local de BEFIT para socios, asistencia, pagos, gastos, campañas y objetivos.
+- `docs/shalom.html` y `docs/shalom-tienda.html`: sitio comercial y catálogo de SHALOM; no forman parte del sistema administrativo local.
+- `shalom-web/`: copia de trabajo del sitio público que se puede separar a un repositorio independiente cuando corresponda.
+- `docs/HESED-LOCAL-TEST-PLAN.md`: pruebas de aceptación manual.
+- `docs/HESED-SUPABASE-SCHEMA.sql` y `docs/HESED-BACKEND-SETUP.md`: diseño preliminar para una futura base de datos central.
+- `archive/`: fuentes originales de recuperación; no se usan como páginas activas.
 
-## Integrado en `main`
-- Portal central `docs/hesed.html` con el logotipo HESED.
-- Copia del panel ASSOCIATED 163 en `docs/hesed-gestion.html`.
-- Copia de Mi Parcela en `docs/hesed-huerta.html`.
-- Módulo inicial BEFIT en `docs/befit.html`, con logotipo y registros locales.
-- Paquete web de SHALOM en `shalom-web/index.html` y `shalom-web/shalom-tienda.html`.
-- Esquema preliminar de backend en `docs/HESED-SUPABASE-SCHEMA.sql` y guía en `docs/HESED-BACKEND-SETUP.md`.
+## Empresas y alcance
+- **SHALOM**: restaurante. Se conserva su panel administrativo y sus datos locales.
+- **BEFIT**: gimnasio. El módulo actual es un prototipo local.
+- **LA HUERTA**: operación agrícola con Mi Parcela. La visualización 3D no se incluye en la experiencia integrada de HESED.
+- Los dos propietarios administran las tres empresas. Los datos de cada empresa deben mantenerse separados.
+- La prioridad es validar el sistema administrativo local antes de conectar Supabase. La sincronización entre dispositivos todavía requiere autenticación central, políticas de acceso, migración y pruebas.
 
-## Alcance confirmado
-- Solo entran los dos propietarios, y ambos administran SHALOM, BEFIT y LA HUERTA.
-- No habrá registro público, usuarios de empleados ni cuentas de clientes dentro de HESED.
-- El trabajo prioritario es el sistema administrativo sincronizado entre dispositivos. La web pública, la tienda y las reservas públicas de SHALOM quedan fuera del alcance por ahora.
-- El portal tiene manifiesto PWA y un service worker inicial para instalar la carcasa desde navegadores compatibles; esto no equivale a sincronización de datos ni a modo offline completo.
+## Seguridad y preparación para producción
+1. Configurar autenticación central segura y permitir exclusivamente a los dos propietarios.
+2. Aplicar y revisar el esquema SQL y las políticas RLS en Supabase.
+3. Integrar cada módulo con la base de datos y probar que los datos estén aislados por empresa.
+4. Migrar los datos locales con respaldo y verificación en varios dispositivos.
+5. Probar flujos y diseño en navegador de escritorio y móvil. Las comprobaciones previas de código no sustituyen las pruebas funcionales.
+6. No guardar claves secretas, contraseñas ni información sensible en archivos públicos del repositorio.
+7. Confirmar los datos oficiales y contenidos comerciales de SHALOM antes de activar pedidos o reservas reales.
 
-## Requisitos para producción
-1. Crear un proyecto Supabase, aplicar y revisar el esquema SQL, desactivar el registro público e invitar exclusivamente a los dos propietarios; asignarles `platform_admin` de forma segura.
-2. Integrar cada módulo administrativo con Auth, base de datos y Realtime; migrar los datos locales con respaldo y pruebas en varios dispositivos.
-3. Probar las políticas de RLS con usuarios de cada negocio y verificar que no puedan leer datos de otros negocios.
-4. Completar y verificar el modelo de La Huerta contra los campos y flujos reales de Mi Parcela antes de migrar información agrícola.
-5. Confirmar carta, precios, horarios, dirección, WhatsApp, Instagram y teléfonos oficiales de SHALOM antes de habilitar pedidos o reservas reales.
-6. Trasladar `shalom-web/` a un repositorio dedicado `shalom-web`. El conector GitHub disponible en esta sesión no permite crear repositorios nuevos; requiere que el propietario cree el repositorio vacío.
-7. Ejecutar pruebas funcionales y visuales en escritorio y móvil; esta sesión ha verificado archivos y cambios del repositorio por lectura de código, no mediante pruebas de navegador.
-
-## Seguridad y límites
-- El módulo BEFIT actual es un prototipo local, no multiusuario.
-- El esquema SQL es una base inicial que debe revisarse y aplicarse en el proyecto Supabase del propietario; no está desplegado desde este repositorio.
-- Nunca exponer una clave `service_role` en HTML/JavaScript público.
-- El sitio comercial de SHALOM conserva campos de contacto vacíos y elementos de carta de ejemplo; no presentarlos como datos confirmados.
+## Limitaciones conocidas
+- Los inicios de sesión locales son prototipos y no equivalen a autenticación segura de producción.
+- Los datos guardados en un navegador no se sincronizan automáticamente con otros dispositivos.
+- El esquema SQL es preliminar y no implica que Supabase ya esté conectado.
+- La web de pedidos no procesa pagos ni garantiza el registro centralizado de pedidos.
