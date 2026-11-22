@@ -154,6 +154,85 @@ for insert to authenticated with check (
   )
 );
 
+
+-- Evidencias privadas de tickets y comprobantes.
+create table if not exists public.cash_evidence (
+  id uuid primary key default gen_random_uuid(),
+  business_id uuid not null references public.businesses(id),
+  session_id uuid not null references public.cash_sessions(id),
+  movement_id uuid references public.cash_movements(id),
+  uploaded_by uuid not null references auth.users(id),
+  object_path text not null unique,
+  file_name text not null,
+  mime_type text not null default 'application/octet-stream',
+  created_at timestamptz not null default now()
+);
+alter table public.cash_evidence enable row level security;
+drop policy if exists "cash evidence read by authorized" on public.cash_evidence;
+create policy "cash evidence read by authorized" on public.cash_evidence
+for select to authenticated using (public.can_manage_business(business_id) or uploaded_by=auth.uid());
+drop policy if exists "cash evidence insert by session owner" on public.cash_evidence;
+create policy "cash evidence insert by session owner" on public.cash_evidence
+for insert to authenticated with check (
+  uploaded_by=auth.uid() and public.can_run_cash(business_id)
+  and exists(select 1 from public.cash_sessions s where s.id=session_id and s.business_id=cash_evidence.business_id and s.opened_by=auth.uid())
+);
+grant select,insert on public.cash_evidence to authenticated;
+
+insert into storage.buckets(id,name,public,file_size_limit,allowed_mime_types)
+values('hesed-evidence','hesed-evidence',false,15728640,array['image/jpeg','image/png','image/webp','application/pdf'])
+on conflict(id) do nothing;
+drop policy if exists "HESED evidence upload" on storage.objects;
+create policy "HESED evidence upload" on storage.objects
+for insert to authenticated with check (
+  bucket_id='hesed-evidence'
+  and public.can_run_cash((storage.foldername(name))[1]::uuid)
+);
+drop policy if exists "HESED evidence read" on storage.objects;
+create policy "HESED evidence read" on storage.objects
+for select to authenticated using (
+  bucket_id='hesed-evidence'
+  and public.can_access_business((storage.foldername(name))[1]::uuid)
+);
+
+-- Verifica el efectivo esperado en el servidor; no confía en el cálculo del navegador.
+create or replace function public.guard_cash_session_update()
+returns trigger language plpgsql security definer
+set search_path = public
+as $
+declare
+  expected numeric(12,2);
+begin
+  if public.is_platform_admin() or public.can_manage_business(old.business_id) then
+    if old.status = 'reconciled' then
+      raise exception 'Un corte conciliado no se modifica. Registra una aclaración.';
+    end if;
+    return new;
+  end if;
+  if old.opened_by <> auth.uid() or old.status <> 'open' or new.status <> 'submitted' then
+    raise exception 'Solo puedes entregar tu propia caja abierta.';
+  end if;
+  if (to_jsonb(new) - array['status','expected_cash','counted_cash','difference','closing_note','closed_at'])
+     <> (to_jsonb(old) - array['status','expected_cash','counted_cash','difference','closing_note','closed_at']) then
+    raise exception 'No puedes modificar datos de apertura ni otros campos del corte.';
+  end if;
+  select old.opening_cash
+    + coalesce(sum(case when kind='income' and payment_method='cash' then amount else 0 end),0)
+    - coalesce(sum(case when kind='expense' and payment_method='cash' then amount else 0 end),0)
+  into expected from public.cash_movements where session_id=old.id;
+  if abs(coalesce(new.expected_cash,0)-expected)>0.01 then
+    raise exception 'El efectivo esperado no coincide con los movimientos registrados.';
+  end if;
+  if abs(coalesce(new.difference,0)-(new.counted_cash-expected))>0.01 then
+    raise exception 'La diferencia no coincide con el efectivo contado.';
+  end if;
+  if new.closed_at is null or new.expected_cash is null or new.counted_cash is null or new.difference is null then
+    raise exception 'El corte requiere efectivo esperado, contado y diferencia.';
+  end if;
+  return new;
+end;
+$;
+
 -- No se permite modificar ni borrar movimientos. Una corrección es un nuevo movimiento de ajuste.
 create or replace function public.reject_cash_movement_mutation()
 returns trigger language plpgsql as $$
@@ -236,7 +315,7 @@ create trigger audit_logs_no_update_delete before update or delete on public.aud
 for each row execute function public.reject_audit_mutation();
 
 grant select,insert,update on public.cash_sessions to authenticated;
-grant select,insert on public.cash_movements to authenticated;
+grant select,insert on public.cash_movements to authenticated;\ngrant select,insert on public.cash_evidence to authenticated;
 grant select,insert on public.audit_logs to authenticated;
 
 -- Habilitar sincronización Realtime para cortes y movimientos.
