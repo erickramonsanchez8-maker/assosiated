@@ -125,6 +125,10 @@ create table if not exists public.cash_movements (
   occurred_at timestamptz not null default now(),
   created_at timestamptz not null default now()
 );
+alter table public.cash_movements add column if not exists direction text not null default 'in';
+alter table public.cash_movements drop constraint if exists cash_movements_direction_check;
+alter table public.cash_movements add constraint cash_movements_direction_check check (direction in ('in','out'));
+
 create index if not exists cash_movements_business_occurred_idx on public.cash_movements(business_id, occurred_at desc);
 create index if not exists cash_movements_session_idx on public.cash_movements(session_id, occurred_at);
 
@@ -235,8 +239,8 @@ begin
     raise exception 'No puedes modificar datos de apertura ni otros campos del corte.';
   end if;
   select old.opening_cash
-    + coalesce(sum(case when kind='income' and payment_method='cash' then amount else 0 end),0)
-    - coalesce(sum(case when kind='expense' and payment_method='cash' then amount else 0 end),0)
+    + coalesce(sum(case when (kind='income' or (kind='adjustment' and direction='in')) and payment_method='cash' then amount else 0 end),0)
+    - coalesce(sum(case when (kind='expense' or (kind='adjustment' and direction='out')) and payment_method='cash' then amount else 0 end),0)
   into expected from public.cash_movements where session_id=old.id;
   if abs(coalesce(new.expected_cash,0)-expected)>0.01 then
     raise exception 'El efectivo esperado no coincide con los movimientos registrados.';
