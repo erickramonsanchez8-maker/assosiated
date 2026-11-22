@@ -78,6 +78,7 @@ for insert to authenticated with check (
     and role in ('manager','operator','viewer','receptionist','accountant')
   )
 );
+grant insert,update on public.memberships to authenticated;
 drop policy if exists "memberships update by business admins" on public.memberships;
 create policy "memberships update by business admins" on public.memberships
 for update to authenticated using (
