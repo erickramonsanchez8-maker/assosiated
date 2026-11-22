@@ -45,6 +45,16 @@ for select to authenticated using (
 );
 
 -- Los encargados pueden asignar roles dentro de su negocio. Un usuario no puede autoasignarse.
+drop policy if exists "memberships visible to same business" on public.memberships;
+create policy "memberships visible to same business" on public.memberships
+for select to authenticated using (
+  user_id = auth.uid() or public.is_platform_admin() or exists (
+    select 1 from public.memberships mine
+    where mine.user_id = auth.uid() and mine.business_id = memberships.business_id
+      and mine.role in ('manager','operator','accountant')
+  )
+);
+
 drop policy if exists "memberships manage by business admins" on public.memberships;
 create policy "memberships manage by business admins" on public.memberships
 for insert to authenticated with check (
@@ -109,7 +119,9 @@ alter table public.cash_movements enable row level security;
 
 drop policy if exists "cash sessions read by business" on public.cash_sessions;
 create policy "cash sessions read by business" on public.cash_sessions
-for select to authenticated using (public.can_access_business(business_id));
+for select to authenticated using (
+  public.can_manage_business(business_id) or opened_by = auth.uid()
+);
 
 drop policy if exists "cash sessions open by assigned staff" on public.cash_sessions;
 create policy "cash sessions open by assigned staff" on public.cash_sessions
@@ -127,7 +139,12 @@ for update to authenticated using (
 
 drop policy if exists "cash movements read by business" on public.cash_movements;
 create policy "cash movements read by business" on public.cash_movements
-for select to authenticated using (public.can_access_business(business_id));
+for select to authenticated using (
+  public.can_manage_business(business_id) or exists (
+    select 1 from public.cash_sessions s
+    where s.id = session_id and s.opened_by = auth.uid()
+  )
+);
 
 drop policy if exists "cash movements insert by session owner" on public.cash_movements;
 create policy "cash movements insert by session owner" on public.cash_movements
@@ -136,7 +153,7 @@ for insert to authenticated with check (
   and public.can_run_cash(business_id)
   and exists (
     select 1 from public.cash_sessions s
-    where s.id = session_id and s.business_id = business_id
+    where s.id = session_id and s.business_id = cash_movements.business_id
       and s.opened_by = auth.uid() and s.status = 'open'
   )
 );
@@ -202,9 +219,9 @@ begin
   end if;
   insert into public.audit_logs(business_id,actor_id,action,entity,entity_id,details)
   values(bid,auth.uid(),act,tg_table_name,ent_id,det);
-  return coalesce(new,old);
+  if tg_op = 'DELETE' then return old; else return new; end if;
 end;
-$$;
+$;
 drop trigger if exists cash_sessions_audit on public.cash_sessions;
 create trigger cash_sessions_audit after insert or update on public.cash_sessions
 for each row execute function public.log_cash_audit();
