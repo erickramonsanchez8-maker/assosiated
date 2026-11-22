@@ -26,7 +26,7 @@
 2. Abrir SQL Editor y ejecutar primero `HESED-SUPABASE-SCHEMA.sql`.
 3. Ejecutar después `HESED-ADMIN-OPERATIONS.sql`.
 4. En Supabase Auth, desactivar el registro público. Invitar a los propietarios y a cada empleado desde Authentication → Users → Invite user.
-5. Tras crear las cuentas de propietarios, asignarles `platform_admin` en `public.profiles`. No compartir ni guardar contraseñas en el repositorio.
+5. Tras crear las cuentas de propietarios, copiar sus UUID desde Authentication → Users y asignarles `platform_admin` en SQL Editor. Ejecutar una vez por propietario: \n\n   ```sql\n   update public.profiles set platform_role = 'platform_admin' where user_id = 'UUID-DEL-PROPIETARIO'::uuid;\n   ```\n\n   No compartir ni guardar contraseñas en el repositorio.
 6. En `public.memberships`, asignar a cada usuario solo los negocios a los que debe entrar. Roles: `manager`, `accountant`, `receptionist`, `operator`, `viewer`. Los dos propietarios usan `profiles.platform_role='platform_admin'`.
 7. Publicar GitHub Pages desde la carpeta `docs` (branch `main), o usar el despliegue existente del portal.
 8. Abrir `hesed-administrativo.html`, elegir Configuración técnica e introducir Project URL y la clave pública anon/publishable. Nunca introducir `service_role`.
