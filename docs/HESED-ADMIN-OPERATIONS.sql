@@ -33,6 +33,24 @@ as $$
   );
 $$;
 
+
+-- Permite a administración actualizar únicamente el nombre visible del personal.
+drop policy if exists "profiles update by business managers" on public.profiles;
+create policy "profiles update by business managers" on public.profiles
+for update to authenticated using (
+  public.is_platform_admin() or exists (
+    select 1 from public.memberships m
+    where m.user_id = profiles.user_id and public.can_manage_business(m.business_id)
+  )
+) with check (
+  public.is_platform_admin() or exists (
+    select 1 from public.memberships m
+    where m.user_id = profiles.user_id and public.can_manage_business(m.business_id)
+  )
+);
+revoke update on public.profiles from authenticated;
+grant update(display_name) on public.profiles to authenticated;
+
 -- Los responsables de un negocio pueden consultar los perfiles de sus compañeros.
 drop policy if exists "profiles visible to same business" on public.profiles;
 create policy "profiles visible to same business" on public.profiles
