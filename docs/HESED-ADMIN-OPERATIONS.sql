@@ -332,4 +332,34 @@ begin
   end if;
 end $$;
 
+-- Conciliaciones de archivos Excel: se conserva el resultado de cada comparación.
+create table if not exists public.excel_reconciliations (
+  id uuid primary key default gen_random_uuid(),
+  business_id uuid not null references public.businesses(id),
+  uploaded_by uuid not null references auth.users(id),
+  file_name text not null,
+  period_month text not null,
+  amount_column text not null,
+  category text not null check (category in ('income','expense','all')),
+  imported_total numeric(14,2) not null,
+  hesed_total numeric(14,2) not null,
+  difference numeric(14,2) not null,
+  row_count integer not null default 0,
+  created_at timestamptz not null default now()
+);
+alter table public.excel_reconciliations enable row level security;
+drop policy if exists "excel reconciliations read by managers" on public.excel_reconciliations;
+create policy "excel reconciliations read by managers" on public.excel_reconciliations
+for select to authenticated using (public.can_manage_business(business_id));
+drop policy if exists "excel reconciliations insert by managers" on public.excel_reconciliations;
+create policy "excel reconciliations insert by managers" on public.excel_reconciliations
+for insert to authenticated with check (uploaded_by=auth.uid() and public.can_manage_business(business_id));
+grant select,insert on public.excel_reconciliations to authenticated;
+drop trigger if exists excel_reconciliations_audit on public.excel_reconciliations;
+create trigger excel_reconciliations_audit after insert on public.excel_reconciliations
+for each row execute function public.log_cash_audit();
+drop trigger if exists excel_reconciliations_no_update_delete on public.excel_reconciliations;
+create trigger excel_reconciliations_no_update_delete before update or delete on public.excel_reconciliations
+for each row execute function public.reject_audit_mutation();
+
 commit;
