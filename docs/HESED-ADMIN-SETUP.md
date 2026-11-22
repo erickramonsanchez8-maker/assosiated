@@ -16,7 +16,7 @@
 - Entrega de corte con cálculo de efectivo esperado y diferencia validado también en PostgreSQL.
 - Revisión, solicitud de aclaración y conciliación por administración.
 - Historial por negocio, filtros y exportación CSV.
-- Reportes mensuales por negocio.
+- Reportes mensuales por negocio.\n- Importación de Excel/CSV con selección de hoja y columna, comparación de totales contra HESED y registro histórico de cada conciliación.
 - Actualización en tiempo real entre dispositivos conectados.
 - Diseño responsive y navegación inferior en celular.
 
