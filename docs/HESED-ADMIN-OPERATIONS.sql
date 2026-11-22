@@ -325,6 +325,9 @@ for each row execute function public.log_cash_audit();
 drop trigger if exists cash_movements_audit on public.cash_movements;
 create trigger cash_movements_audit after insert on public.cash_movements
 for each row execute function public.log_cash_audit();
+drop trigger if exists memberships_audit on public.memberships;
+create trigger memberships_audit after insert or update on public.memberships
+for each row execute function public.log_cash_audit();
 drop trigger if exists cash_evidence_audit on public.cash_evidence;
 create trigger cash_evidence_audit after insert on public.cash_evidence
 for each row execute function public.log_cash_audit();
