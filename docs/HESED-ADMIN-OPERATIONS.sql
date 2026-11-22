@@ -196,9 +196,6 @@ for insert to authenticated with check (
   and exists(select 1 from public.cash_sessions s where s.id=session_id and s.business_id=cash_evidence.business_id and s.opened_by=auth.uid())
 );
 grant select,insert on public.cash_evidence to authenticated;
-drop trigger if exists cash_evidence_audit on public.cash_evidence;
-create trigger cash_evidence_audit after insert on public.cash_evidence
-for each row execute function public.log_cash_audit();
 
 insert into storage.buckets(id,name,public,file_size_limit,allowed_mime_types)
 values('hesed-evidence','hesed-evidence',false,15728640,array['image/jpeg','image/png','image/webp','application/pdf'])
@@ -323,6 +320,9 @@ create trigger cash_sessions_audit after insert or update on public.cash_session
 for each row execute function public.log_cash_audit();
 drop trigger if exists cash_movements_audit on public.cash_movements;
 create trigger cash_movements_audit after insert on public.cash_movements
+for each row execute function public.log_cash_audit();
+drop trigger if exists cash_evidence_audit on public.cash_evidence;
+create trigger cash_evidence_audit after insert on public.cash_evidence
 for each row execute function public.log_cash_audit();
 
 create or replace function public.reject_audit_mutation()
