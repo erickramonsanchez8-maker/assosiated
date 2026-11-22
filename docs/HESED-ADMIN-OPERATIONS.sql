@@ -315,7 +315,8 @@ create trigger audit_logs_no_update_delete before update or delete on public.aud
 for each row execute function public.reject_audit_mutation();
 
 grant select,insert,update on public.cash_sessions to authenticated;
-grant select,insert on public.cash_movements to authenticated;\ngrant select,insert on public.cash_evidence to authenticated;
+grant select,insert on public.cash_movements to authenticated;
+grant select,insert on public.cash_evidence to authenticated;
 grant select,insert on public.audit_logs to authenticated;
 
 -- Habilitar sincronización Realtime para cortes y movimientos.
