@@ -112,6 +112,7 @@ create table if not exists public.cash_sessions (
 );
 create index if not exists cash_sessions_business_opened_idx on public.cash_sessions(business_id, opened_at desc);
 create index if not exists cash_sessions_owner_status_idx on public.cash_sessions(opened_by, status);
+create unique index if not exists cash_sessions_one_open_per_user_idx on public.cash_sessions(business_id, opened_by) where status='open';
 
 create table if not exists public.cash_movements (
   id uuid primary key default gen_random_uuid(),
