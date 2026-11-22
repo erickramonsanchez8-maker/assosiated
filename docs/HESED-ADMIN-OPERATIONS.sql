@@ -48,11 +48,7 @@ for select to authenticated using (
 drop policy if exists "memberships visible to same business" on public.memberships;
 create policy "memberships visible to same business" on public.memberships
 for select to authenticated using (
-  user_id = auth.uid() or public.is_platform_admin() or exists (
-    select 1 from public.memberships mine
-    where mine.user_id = auth.uid() and mine.business_id = memberships.business_id
-      and mine.role in ('manager','operator','accountant')
-  )
+  user_id = auth.uid() or public.is_platform_admin() or public.can_manage_business(business_id)
 );
 
 drop policy if exists "memberships manage by business admins" on public.memberships;
