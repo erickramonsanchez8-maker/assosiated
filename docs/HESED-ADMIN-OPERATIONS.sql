@@ -295,7 +295,7 @@ for each row execute function public.guard_cash_session_update();
 create or replace function public.log_cash_audit()
 returns trigger language plpgsql security definer
 set search_path = public
-as $$
+as $audit$
 declare
   bid uuid;
   ent_id text;
@@ -314,7 +314,7 @@ begin
   values(bid,auth.uid(),act,tg_table_name,ent_id,det);
   if tg_op = 'DELETE' then return old; else return new; end if;
 end;
-$;
+$audit$;
 drop trigger if exists cash_sessions_audit on public.cash_sessions;
 create trigger cash_sessions_audit after insert or update on public.cash_sessions
 for each row execute function public.log_cash_audit();
