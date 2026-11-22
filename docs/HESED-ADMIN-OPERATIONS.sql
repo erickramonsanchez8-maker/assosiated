@@ -17,7 +17,7 @@ as $$
     select 1 from public.memberships m
     where m.user_id = auth.uid()
       and m.business_id = target_business
-      and m.role in ('manager','operator','accountant')
+      and m.role in ('manager','accountant')
   );
 $$;
 
