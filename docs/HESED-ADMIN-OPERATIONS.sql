@@ -392,8 +392,6 @@ drop trigger if exists excel_reconciliations_no_update_delete on public.excel_re
 create trigger excel_reconciliations_no_update_delete before update or delete on public.excel_reconciliations
 for each row execute function public.reject_audit_mutation();
 
-commit;
-
 
 -- Clasificación contable-operativa para que HESED analice conceptos comparables.
 alter table public.cash_movements add column if not exists category text not null default 'Sin clasificar';
@@ -438,3 +436,5 @@ for each row execute function public.log_cash_audit();
 drop trigger if exists analytics_snapshots_no_update_delete on public.analytics_snapshots;
 create trigger analytics_snapshots_no_update_delete before update or delete on public.analytics_snapshots
 for each row execute function public.reject_audit_mutation();
+
+commit;
