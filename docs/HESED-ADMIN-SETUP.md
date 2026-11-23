@@ -15,6 +15,9 @@
 - Revisión, aclaración y conciliación administrativa.
 - Historial, exportación CSV y reportes mensuales.
 - Importación Excel/CSV: selección de hoja y columna, comparación de totales y registro de cada conciliación.
+- Analítica tipo PRISMA: comparación de periodos, análisis por categorías y conceptos, medios de pago, diferencias de caja, señales de posibles duplicados e importes atípicos.
+- Diagnósticos ejecutivos con hallazgos, recomendaciones priorizadas, comparativo entre divisiones para propietarios y simulador de escenarios.
+- Historial inmutable de diagnósticos guardados.
 - Tickets y comprobantes privados; OCR asistido para sugerir importes que siempre deben verificarse.
 - Auditoría inmutable, sincronización Realtime y diseño móvil.
 
@@ -35,10 +38,15 @@ where user_id = 'UUID-DEL-PROPIETARIO'::uuid;
 7. En el repositorio, activar GitHub Pages: Settings → Pages → Build and deployment → Deploy from a branch → main → /docs → Save. La API del repositorio reportaba Pages desactivado al preparar esta versión.
 8. Abrir hesed-administrativo.html, elegir Configuración técnica e introducir Project URL y la clave pública anon/publishable. Nunca usar service_role en el navegador.
 9. Probar cuentas distintas y confirmar aislamiento entre negocios y entre cajas de recepcionistas.
-10. Probar apertura, movimientos, corte, diferencias, conciliación, carga/descarga de comprobantes, OCR, Excel y sincronización desde dos teléfonos.
+10. Probar apertura, movimientos, corte, diferencias, conciliación, carga/descarga de comprobantes, OCR, Excel, analítica por negocio, comparativo de portafolio, guardado de diagnósticos y sincronización desde dos teléfonos.
 
 ## Alta de usuarios
 Las cuentas se invitan desde Supabase Auth; el panel no permite auto-registro ni crea contraseñas. Después, en HESED → Personal, pega el UUID del usuario y asigna su rol en el negocio actual. Un usuario puede recibir membresía en más de un negocio.
+
+## Analítica y calidad de datos
+La sección Analítica consulta movimientos y cortes del periodo seleccionado y los compara con un periodo anterior equivalente. Para propietarios, el alcance de portafolio reúne SHALOM, BEFIT y LA HUERTA; encargados y contabilidad solo consultan su negocio. Los hallazgos se basan en reglas transparentes: cambios porcentuales, diferencias de caja, concentración de egresos, importes por encima de la mediana y coincidencias exactas que podrían ser duplicados. Las alertas no prueban fraude ni sustituyen la revisión documental. El simulador calcula escenarios hipotéticos sobre el flujo neto registrado y no modifica movimientos. Cada diagnóstico guardado conserva la fotografía de datos, periodo, indicadores y hallazgos que se presentaron.
+
+Para análisis de mayor precisión, el personal debe seleccionar una categoría al registrar cada movimiento. Los registros históricos existentes quedan como `Sin clasificar` y no se les inventa una categoría.
 
 ## Modelo de caja
 Cada recepcionista abre su propia sesión. El efectivo esperado se calcula como fondo inicial + ingresos en efectivo − gastos en efectivo, incluyendo ajustes según su dirección. Tarjeta y transferencias no forman parte del efectivo físico. Al entregar el corte, PostgreSQL recalcula el esperado. Los movimientos no se editan ni eliminan; cualquier corrección debe registrarse como un nuevo ajuste.
@@ -50,4 +58,5 @@ Los movimientos y el historial de auditoría son inmutables. Las altas y cambios
 - El código está en el repositorio, pero el backend no está conectado: crear el proyecto Supabase, ejecutar SQL e invitar usuarios requiere acceso del propietario.
 - No declarar producción hasta probar RLS, almacenamiento, sincronización y restauración con usuarios reales.
 - El OCR es asistido, no infalible; el importe debe verificarse visualmente.
-- Excel compara el total de la columna seleccionada contra movimientos HESED; no convierte automáticamente cada fila del Excel en movimiento contable. Validar el mapeo con el formato real antes de usarlo como conciliación oficial.
+- Excel compara el total de la columna seleccionada contra movimientos HESED; no convierte automáticamente cada fila del Excel en movimiento contable.
+- La analítica financiera se limita a los movimientos capturados en HESED. El flujo neto registrado no equivale a utilidad contable y no incluye inventarios, cuentas por cobrar, depreciación u obligaciones no registradas. Validar el mapeo con el formato real antes de usarlo como conciliación oficial.
