@@ -28,7 +28,7 @@ La aplicación principal de administración está en `docs/hesed-administrativo.
 - `docs/hesed.html`: portal de entrada.
 - `docs/hesed-administrativo.html`: aplicación administrativa responsive.
 - `docs/HESED-SUPABASE-SCHEMA.sql`: esquema base.
-- `docs/HESED-ADMIN-OPERATIONS.sql`: roles, cajas, auditoría, evidencias y conciliaciones Excel.
+- `docs/HESED-ADMIN-OPERATIONS.sql`: roles, cajas, categorías, auditoría, evidencias, conciliaciones Excel e historial de diagnósticos analíticos.
 - `docs/HESED-ADMIN-SETUP.md`: pasos de instalación y pruebas.
 - `docs/hesed-gestion.html`: panel previo de análisis y campañas.
 - `docs/befit.html`: módulo previo de BEFIT.
