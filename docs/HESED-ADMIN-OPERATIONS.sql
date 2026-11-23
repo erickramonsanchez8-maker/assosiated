@@ -393,3 +393,48 @@ create trigger excel_reconciliations_no_update_delete before update or delete on
 for each row execute function public.reject_audit_mutation();
 
 commit;
+
+
+-- Clasificación contable-operativa para que HESED analice conceptos comparables.
+alter table public.cash_movements add column if not exists category text not null default 'Sin clasificar';
+create index if not exists cash_movements_business_category_date_idx
+  on public.cash_movements(business_id, category, occurred_at desc);
+
+-- Historial de diagnósticos: conserva la fotografía analítica que se presentó a administración.
+create table if not exists public.analytics_snapshots (
+  id uuid primary key default gen_random_uuid(),
+  business_id uuid references public.businesses(id),
+  scope text not null check (scope in ('business','portfolio')),
+  period_start date not null,
+  period_end date not null,
+  generated_by uuid not null references auth.users(id),
+  snapshot jsonb not null,
+  created_at timestamptz not null default now(),
+  constraint analytics_snapshot_scope_business check (
+    (scope='business' and business_id is not null) or
+    (scope='portfolio' and business_id is null)
+  )
+);
+create index if not exists analytics_snapshots_business_created_idx
+  on public.analytics_snapshots(business_id, created_at desc);
+alter table public.analytics_snapshots enable row level security;
+drop policy if exists "analytics snapshots read by managers" on public.analytics_snapshots;
+create policy "analytics snapshots read by managers" on public.analytics_snapshots
+for select to authenticated using (
+  public.is_platform_admin() or (business_id is not null and public.can_manage_business(business_id))
+);
+drop policy if exists "analytics snapshots insert by managers" on public.analytics_snapshots;
+create policy "analytics snapshots insert by managers" on public.analytics_snapshots
+for insert to authenticated with check (
+  generated_by=auth.uid() and (
+    (scope='portfolio' and business_id is null and public.is_platform_admin()) or
+    (scope='business' and business_id is not null and public.can_manage_business(business_id))
+  )
+);
+grant select,insert on public.analytics_snapshots to authenticated;
+drop trigger if exists analytics_snapshots_audit on public.analytics_snapshots;
+create trigger analytics_snapshots_audit after insert on public.analytics_snapshots
+for each row execute function public.log_cash_audit();
+drop trigger if exists analytics_snapshots_no_update_delete on public.analytics_snapshots;
+create trigger analytics_snapshots_no_update_delete before update or delete on public.analytics_snapshots
+for each row execute function public.reject_audit_mutation();
