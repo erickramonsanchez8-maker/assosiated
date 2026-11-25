@@ -4,8 +4,8 @@
 El nuevo centro administrativo responsive está integrado en `docs/hesed-administrativo.html`. El código está en `main`; el backend Supabase todavía requiere configuración en la cuenta del propietario.
 
 ## Bloqueadores antes de operar con dinero real
-1. Crear el proyecto Supabase dedicado a HESED.
-2. Ejecutar `HESED-SUPABASE-SCHEMA.sql` y después `HESED-ADMIN-OPERATIONS.sql`.
+1. Activar GitHub Pages en Settings → Pages y seleccionar GitHub Actions. Después ejecutar el workflow “Publicar HESED en GitHub Pages” desde Actions. El workflow ya está integrado; la primera activación debe hacerla un propietario del repositorio.
+2. Crear el proyecto Supabase dedicado a HESED. Ejecutar `HESED-SUPABASE-SCHEMA.sql` y después `HESED-ADMIN-OPERATIONS.sql`.
 3. Desactivar registro público, invitar a los dos propietarios y asignar `platform_admin`.
 4. Invitar recepcionistas y encargados y asignar membresías con el mínimo permiso necesario.
 5. Configurar URL y clave pública Supabase en el panel; nunca publicar `service_role`.
