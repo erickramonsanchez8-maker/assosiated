@@ -35,7 +35,7 @@ where user_id = 'UUID-DEL-PROPIETARIO'::uuid;
 ```
 
 6. Abrir HESED → Personal y asignar cada empleado al negocio correspondiente. Roles: manager, accountant, receptionist, operator o viewer. No dar permisos globales a recepcionistas.
-7. En el repositorio, activar GitHub Pages: Settings → Pages → Build and deployment → Deploy from a branch → main → /docs → Save. La API del repositorio reportaba Pages desactivado al preparar esta versión.
+7. Activar GitHub Pages una sola vez desde Settings → Pages. En Build and deployment, seleccionar **GitHub Actions** como Source y guardar. Después, ejecutar el workflow “Publicar HESED en GitHub Pages” desde Actions → Publicar HESED en GitHub Pages → Run workflow. El repositorio ya incluye ese workflow; el conector automatizado no tiene permiso para crear el sitio Pages por primera vez.
 8. Abrir hesed-administrativo.html, elegir Configuración técnica e introducir Project URL y la clave pública anon/publishable. Nunca usar service_role en el navegador.
 9. Probar cuentas distintas y confirmar aislamiento entre negocios y entre cajas de recepcionistas.
 10. Probar apertura, movimientos, corte, diferencias, conciliación, carga/descarga de comprobantes, OCR, Excel, analítica por negocio, comparativo de portafolio, guardado de diagnósticos y sincronización desde dos teléfonos.
